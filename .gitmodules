@@ -1,0 +1,4 @@
+[submodule "BasePlugin"]
+	path = BasePlugin
+	url = https://github.com/TechsCode/BasePlugin.git
+	branch = master
