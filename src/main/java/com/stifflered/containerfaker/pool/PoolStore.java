@@ -71,7 +71,7 @@ public class PoolStore {
         }, 27);
 
         Inventory inventory = randomIndex(this.poolStorage.get(type));
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 4; i++) {
             int randomSlot;
             do {
                 randomSlot = randomNumber(0, inventory.getSize() - 1);
