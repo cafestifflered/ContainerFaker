@@ -132,11 +132,11 @@ public class PoolStore {
                 itemStack.setAmount(randomNumber(0, 3));
             }
             // random durability
-            if (meta instanceof Damageable damageable) {
-                damageable.setDamage(randomNumber(10, itemStack.getType().getMaxDurability()));
+            short maxDurability = itemStack.getType().getMaxDurability();
+            if (maxDurability > 0 && meta instanceof Damageable damageable) {
+                damageable.setDamage(randomNumber(10, maxDurability));
             }
         });
-
         return itemStack;
     }
 
