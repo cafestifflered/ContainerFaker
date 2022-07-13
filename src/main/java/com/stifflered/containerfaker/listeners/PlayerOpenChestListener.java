@@ -18,7 +18,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 public class PlayerOpenChestListener implements Listener {
 
     private final MaterialSetTag OPENABLES = new MaterialSetTag(NamespacedKey.fromString("openables", Main.INSTANCE))
-            .add(Material.CHEST, Material.TRAPPED_CHEST, Material.BARREL, Material.HOPPER, Material.DROPPER, Material.DISPENSER, Material.BLAST_FURNACE, Material.FURNACE, Material.FLETCHING_TABLE, Material.LOOM, Material.SMITHING_TABLE, Material.SMOKER, Material.DEAD_BRAIN_CORAL, Material.DEAD_TUBE_CORAL, Material.DEAD_HORN_CORAL)
+            .add(Material.CHEST, Material.TRAPPED_CHEST, Material.BARREL, Material.HOPPER, Material.OBSERVER, Material.DROPPER, Material.DISPENSER, Material.BLAST_FURNACE, Material.FURNACE, Material.FLETCHING_TABLE, Material.LOOM, Material.SMITHING_TABLE, Material.SMOKER, Material.DEAD_BRAIN_CORAL, Material.DEAD_TUBE_CORAL, Material.DEAD_HORN_CORAL)
             .add(MaterialSetTag.SHULKER_BOXES.getValues())
             .lock();
 
