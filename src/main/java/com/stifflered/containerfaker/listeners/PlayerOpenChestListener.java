@@ -22,6 +22,10 @@ public class PlayerOpenChestListener implements Listener {
             .add(MaterialSetTag.SHULKER_BOXES.getValues())
             .lock();
 
+    private final MaterialSetTag DISALLOW_BLOCKS = new MaterialSetTag(NamespacedKey.fromString("disallow_blocks", Main.INSTANCE))
+            .add(Material.COMPOSTER, Material.BREWING_STAND)
+            .lock();
+
     @EventHandler
     public void onOpen(PlayerInteractEvent event) {
         if (event.getClickedBlock() == null || event.getAction().isLeftClick()) {
@@ -43,6 +47,8 @@ public class PlayerOpenChestListener implements Listener {
             event.setUseInteractedBlock(Event.Result.DENY);
             OpenedChestManager.INSTANCE.openChest(event.getPlayer(), location, PoolType.FOOD);
             event.getPlayer().playSound(block.getLocation(), Sound.BLOCK_CHEST_OPEN, 2, 1);
+        } else if (DISALLOW_BLOCKS.isTagged(block.getType())) {
+            event.setUseInteractedBlock(Event.Result.DENY);
         }
     }
 
