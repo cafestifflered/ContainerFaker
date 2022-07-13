@@ -29,7 +29,12 @@ public class PlayerOpenChestListener implements Listener {
         }
 
         Block block = event.getClickedBlock();
-        if (canNormallyOpenContainer(event.getPlayer(), block)) {
+        if (OPENABLES.isTagged(block.getType())) {
+            if (!canNormallyOpenContainer(event.getPlayer(), block)) {
+                event.setUseInteractedBlock(Event.Result.DENY);
+                return;
+            }
+
             Location location = block.getLocation();
             if (PoolStore.INSTANCE.isPoolChest(location)) {
                 return;
@@ -49,19 +54,15 @@ public class PlayerOpenChestListener implements Listener {
         BlockData data = block.getBlockData();
         Material material = data.getMaterial();
 
-        if (OPENABLES.isTagged(material)) {
-            if (material == Material.CHEST) {
-                if (!block.getLocation().add(0, 1, 0).getBlock().getType().isAir()) {
-                    return false; // can't open if block is above
-                }
-            } else if (MaterialSetTag.SHULKER_BOXES.isTagged(material)) {
-                if (data instanceof Directional directional && !block.getLocation().add(directional.getFacing().getDirection()).getBlock().getType().isAir()) {
-                    return false; // can't open if block is obstructing shulker box opening
-                }
+        if (material == Material.CHEST) {
+            if (!block.getLocation().add(0, 1, 0).getBlock().getType().isAir()) {
+                return false; // can't open if block is above
             }
-            return true;
+        } else if (MaterialSetTag.SHULKER_BOXES.isTagged(material)) {
+            if (data instanceof Directional directional && !block.getLocation().add(directional.getFacing().getDirection()).getBlock().getType().isAir()) {
+                return false; // can't open if block is obstructing shulker box opening
+            }
         }
-
-        return false;
+        return true;
     }
 }
