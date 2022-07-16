@@ -7,15 +7,12 @@ import com.stifflered.containerfaker.pool.PoolStore;
 import com.stifflered.containerfaker.pool.PoolType;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.block.data.Directional;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public class PlayerOpenChestListener implements Listener {
+public class PlayerInteractEventListener implements Listener {
 
     private final MaterialSetTag OPENABLES = new MaterialSetTag(NamespacedKey.fromString("openables", Main.INSTANCE))
             .add(Material.CHEST, Material.TRAPPED_CHEST, Material.BARREL, Material.HOPPER, Material.OBSERVER, Material.DROPPER, Material.DISPENSER, Material.BLAST_FURNACE, Material.FURNACE, Material.FLETCHING_TABLE, Material.LOOM, Material.SMITHING_TABLE, Material.SMOKER, Material.DEAD_BRAIN_CORAL, Material.DEAD_TUBE_CORAL, Material.DEAD_HORN_CORAL)
@@ -24,6 +21,7 @@ public class PlayerOpenChestListener implements Listener {
 
     private final MaterialSetTag DISALLOW_BLOCKS = new MaterialSetTag(NamespacedKey.fromString("disallow_blocks", Main.INSTANCE))
             .add(Material.COMPOSTER, Material.BREWING_STAND)
+            .add(MaterialSetTag.BEDS.getValues())
             .lock();
 
     @EventHandler

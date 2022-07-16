@@ -15,7 +15,7 @@ public class Main extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         INSTANCE = this;
-        this.register(new PlayerOpenChestListener(), new PlayerCloseInventoryListener(), new PlayerBreakBlockListener(), new PlayerPlaceBlockListener());
+        this.register(new PlayerInteractEventListener(), new PlayerCloseInventoryListener(), new PlayerBreakBlockListener(), new PlayerPlaceBlockListener());
 
         World world = Bukkit.getWorld(NamespacedKey.minecraft("overworld"));
         for (PoolType type : PoolType.values()) {
