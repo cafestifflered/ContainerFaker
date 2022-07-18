@@ -43,7 +43,7 @@ public class PoolContainerOverrideHandler {
         return switch (material) {
             case BLAST_FURNACE, SMOKER, SMITHING_TABLE -> PoolType.FOOD;
             case WHITE_SHULKER_BOX, LIGHT_BLUE_SHULKER_BOX, LOOM -> PoolType.ARMOR;
-            case FLETCHING_TABLE, CRAFTING_TABLE, CHEST -> Randoms.randomIndex(PoolType.values());
+            case FLETCHING_TABLE, CRAFTING_TABLE, CHEST -> PoolType.RANDOM;
             case SHULKER_BOX, BLACK_SHULKER_BOX, BROWN_SHULKER_BOX -> PoolType.DRINKS_HEALTH;
             case BLUE_SHULKER_BOX, YELLOW_SHULKER_BOX, OBSERVER -> PoolType.WEAPONS;
             case DEAD_TUBE_CORAL, DEAD_HORN_CORAL, DEAD_BRAIN_CORAL -> PoolType.JUNK;
