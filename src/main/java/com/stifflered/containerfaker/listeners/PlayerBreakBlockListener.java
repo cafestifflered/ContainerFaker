@@ -1,6 +1,7 @@
 package com.stifflered.containerfaker.listeners;
 
 import com.stifflered.containerfaker.pool.OpenedChestManager;
+import com.stifflered.containerfaker.pool.PoolContainerOverrideHandler;
 import com.stifflered.containerfaker.pool.PoolStore;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -22,5 +23,6 @@ public class PlayerBreakBlockListener implements Listener {
         if (OpenedChestManager.INSTANCE.isChestMirror(location)) {
             OpenedChestManager.INSTANCE.removeChest(location);
         }
+        PoolContainerOverrideHandler.removePoolOverride(block);
     }
 }

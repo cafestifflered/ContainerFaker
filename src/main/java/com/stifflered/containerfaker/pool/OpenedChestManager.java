@@ -1,5 +1,7 @@
 package com.stifflered.containerfaker.pool;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -34,6 +36,7 @@ public class OpenedChestManager {
         if (inventory == null) {
             inventory = PoolStore.INSTANCE.randomFromPool(location, type);
             if (inventory == null) {
+                player.sendMessage(Component.text("Oh no! Currently no registered chests for that pool.", NamedTextColor.RED));
                 return false; // empty pool
             }
 

@@ -2,6 +2,7 @@ package com.stifflered.containerfaker.pool;
 
 import com.stifflered.containerfaker.Main;
 import com.stifflered.containerfaker.util.BlockLocationIterator;
+import com.stifflered.containerfaker.util.Randoms;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
@@ -15,7 +16,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 
 public class PoolStore {
@@ -70,11 +70,15 @@ public class PoolStore {
             }
         }, 27);
 
-        Inventory inventory = randomIndex(this.poolStorage.get(type));
+        Inventory inventory = Randoms.randomIndex(this.poolStorage.get(type));
+        if (inventory == null) {
+            return null;
+        }
+
         for (int i = 0; i < 4; i++) {
             int randomSlot;
             do {
-                randomSlot = randomNumber(0, inventory.getSize() - 1);
+                randomSlot = Randoms.randomNumber(0, inventory.getSize() - 1);
             } while (chosenItems.containsKey(randomSlot));
 
             chosenItems.put(randomSlot, inventory.getItem(randomSlot));
@@ -97,7 +101,7 @@ public class PoolStore {
     public void removePoolChest(Location location) {
         PoolType type = this.poolChests.remove(location);
         if (type != null) {
-            new BukkitRunnable(){
+            new BukkitRunnable() {
 
                 @Override
                 public void run() {
@@ -129,35 +133,17 @@ public class PoolStore {
         itemStack.editMeta((meta) -> {
             // random stack size
             if (itemStack.getMaxStackSize() != 1 && !itemStack.getType().isAir()) {
-                itemStack.setAmount(randomNumber(0, 3));
+                itemStack.setAmount(Randoms.randomNumber(0, 3));
             }
             // random durability
             short maxDurability = itemStack.getType().getMaxDurability();
             if (maxDurability > 0 && meta instanceof Damageable damageable) {
-                damageable.setDamage(randomNumber(10, maxDurability));
+                damageable.setDamage(Randoms.randomNumber(10, maxDurability));
             }
         });
         return itemStack;
     }
 
-
-    private static <T> T randomIndex(List<T> list) {
-        if (list.isEmpty()) {
-            return null;
-        }
-
-        return list.get(ThreadLocalRandom.current().nextInt(list.size()));
-    }
-
-    private static int randomNumber(int min, int max) {
-        if (min > max) {
-            int temp = min;
-            min = max;
-            max = temp;
-        }
-
-        return ThreadLocalRandom.current().nextInt(max - min + 1) + min;
-    }
 
     private boolean isWithinArea(Vector min, Vector max, Location location) {
         double x = location.getX();

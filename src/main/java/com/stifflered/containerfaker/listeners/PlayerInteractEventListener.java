@@ -2,15 +2,15 @@ package com.stifflered.containerfaker.listeners;
 
 import com.destroystokyo.paper.MaterialSetTag;
 import com.stifflered.containerfaker.Main;
-import com.stifflered.containerfaker.pool.OpenedChestManager;
-import com.stifflered.containerfaker.pool.PoolStore;
-import com.stifflered.containerfaker.pool.PoolType;
+import com.stifflered.containerfaker.pool.*;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+
+import java.util.logging.Level;
 
 public class PlayerInteractEventListener implements Listener {
 
@@ -38,7 +38,13 @@ public class PlayerInteractEventListener implements Listener {
             }
 
             event.setUseInteractedBlock(Event.Result.DENY);
-            OpenedChestManager.INSTANCE.openChest(event.getPlayer(), location, PoolType.FOOD);
+            PoolType type = PoolContainerOverrideHandler.getPoolType(block);
+            if (type == null) {
+                Main.INSTANCE.getLogger().log(Level.WARNING, "Missing pool override for block type: " + block.getType());
+                return;
+            }
+
+            OpenedChestManager.INSTANCE.openChest(event.getPlayer(), location, type);
             event.getPlayer().playSound(block.getLocation(), Sound.BLOCK_CHEST_OPEN, 2, 1);
         } else if (DISALLOW_BLOCKS.isTagged(block.getType())) {
             event.setUseInteractedBlock(Event.Result.DENY);

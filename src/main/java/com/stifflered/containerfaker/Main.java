@@ -1,5 +1,6 @@
 package com.stifflered.containerfaker;
 
+import com.stifflered.containerfaker.commands.ContainerOverrideCommand;
 import com.stifflered.containerfaker.listeners.*;
 import com.stifflered.containerfaker.pool.PoolType;
 import org.bukkit.Bukkit;
@@ -16,7 +17,7 @@ public class Main extends JavaPlugin implements Listener {
     public void onEnable() {
         INSTANCE = this;
         this.register(new PlayerInteractEventListener(), new PlayerCloseInventoryListener(), new PlayerBreakBlockListener(), new PlayerPlaceBlockListener());
-
+        Bukkit.getCommandMap().register("containerfaker", new ContainerOverrideCommand());
         World world = Bukkit.getWorld(NamespacedKey.minecraft("overworld"));
         for (PoolType type : PoolType.values()) {
             type.refreshPool(world);
