@@ -32,7 +32,6 @@ public class PoolStore {
     }
 
     public CompletableFuture<Void> loadPool(World world, PoolType type) {
-        Main.INSTANCE.getLogger().log(Level.INFO, "Loading pool: " + type);
         Location min = type.getMin().toLocation(world);
         Location max = type.getMax().toLocation(world);
         return loadChunksBetween(min, max).thenAccept((v) -> {
@@ -47,7 +46,6 @@ public class PoolStore {
                     poolChests.put(chest.getLocation(), type);
                 }
             }
-            Main.INSTANCE.getLogger().log(Level.INFO, "Loaded pool: " + type + " WITH " + inventories.size());
         });
     }
 
