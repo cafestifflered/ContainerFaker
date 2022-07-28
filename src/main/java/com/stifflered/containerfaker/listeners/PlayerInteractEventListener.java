@@ -31,18 +31,14 @@ public class PlayerInteractEventListener implements Listener {
         }
 
         Block block = event.getClickedBlock();
-        if (OPENABLES.isTagged(block.getType())) {
+        PoolType type = PoolContainerOverrideHandler.fromMaterial(block.getType());
+        if (type != null) {
             Location location = block.getLocation();
             if (PoolStore.INSTANCE.isPoolChest(location)) {
                 return;
             }
 
             event.setUseInteractedBlock(Event.Result.DENY);
-            PoolType type = PoolContainerOverrideHandler.getPoolType(block);
-            if (type == null) {
-                Main.INSTANCE.getLogger().log(Level.WARNING, "Missing pool override for block type: " + block.getType());
-                return;
-            }
 
             OpenedChestManager.INSTANCE.openChest(event.getPlayer(), location, type);
             event.getPlayer().playSound(block.getLocation(), Sound.BLOCK_CHEST_OPEN, 2, 1);

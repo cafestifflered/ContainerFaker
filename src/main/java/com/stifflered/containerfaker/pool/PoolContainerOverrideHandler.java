@@ -39,7 +39,7 @@ public class PoolContainerOverrideHandler {
         chunk.getPersistentDataContainer().set(getKey(block), PersistentDataType.STRING, type.name());
     }
 
-    private static PoolType fromMaterial(Material material) {
+    public static PoolType fromMaterial(Material material) {
         return switch (material) {
             case BLAST_FURNACE, SMOKER, DROPPER, RED_SHULKER_BOX, FURNACE -> PoolType.FOOD;
             case WHITE_SHULKER_BOX, LIGHT_BLUE_SHULKER_BOX, LOOM, MAGENTA_SHULKER_BOX, PURPLE_SHULKER_BOX -> PoolType.ARMOR;
