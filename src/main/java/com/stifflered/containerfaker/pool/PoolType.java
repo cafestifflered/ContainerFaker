@@ -8,12 +8,13 @@ import java.util.concurrent.CompletableFuture;
 public enum PoolType {
 
     // DONT CHANGE THESE NAMES unless needed!
-    JUNK(new Vector(104, 46, -19), new Vector(118, 36, -10)),
-    WEAPONS(new Vector(104, 46, -31), new Vector(118, 36, -22)),
-    DRINKS_HEALTH(new Vector(122, 36, -22), new Vector(136, 46, -31)),
-    ARMOR(new Vector(122, 36, -10), new Vector(136, 46, -19)),
-    FOOD(new Vector(122, 36, 2), new Vector(136, 46, -7)),
-    RANDOM(new Vector(106, 36, 5), new Vector(136, 46, 19));
+    JUNK(new Vector(100004, 26, 99994), new Vector(99990, 16, 99985)),
+    WEAPONS(new Vector(99990, 26, 99973), new Vector(100004, 16, 99982)),
+    DRINKS_HEALTH(new Vector(100008, 16, 99982), new Vector(100022, 26, 99973)),
+    ARMOR(new Vector(100008, 26, 99985), new Vector(100002, 16, 99994)),
+    FOOD(new Vector(100008, 26, 99997), new Vector(100022, 16, 100006)),
+    RANDOM(new Vector(99992, 26, 100009), new Vector(100022, 16, 100023)),
+    EPIC(new Vector(99999, -14, 99995), new Vector(100014, 5, 100006));
 
     private final Vector min;
     private final Vector max;
