@@ -20,7 +20,7 @@ public class PlayerInteractEventListener implements Listener {
             .lock();
 
     private final MaterialSetTag DISALLOW_BLOCKS = new MaterialSetTag(NamespacedKey.fromString("disallow_blocks", Main.INSTANCE))
-            .add(Material.COMPOSTER, Material.BREWING_STAND)
+            .add(Material.COMPOSTER, Material.BREWING_STAND, Material.DRAGON_EGG)
             .add(MaterialSetTag.BEDS.getValues())
             .lock();
 
