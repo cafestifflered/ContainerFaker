@@ -14,7 +14,7 @@ public enum PoolType {
     ARMOR(new Vector(100008, 26, 99985), new Vector(100002, 16, 99994)),
     FOOD(new Vector(100008, 26, 99997), new Vector(100022, 16, 100006)),
     RANDOM(new Vector(99992, 26, 100009), new Vector(100022, 16, 100023)),
-    EPIC(new Vector(99999, -14, 99995), new Vector(100014, 5, 100006));
+    EPIC(new Vector(99999, 5, 99995), new Vector(100014, 14, 100006));
 
     private final Vector min;
     private final Vector max;
