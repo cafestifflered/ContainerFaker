@@ -11,7 +11,7 @@ public enum PoolType {
     JUNK(new Vector(100004, 26, 99994), new Vector(99990, 16, 99985)),
     WEAPONS(new Vector(99990, 26, 99973), new Vector(100004, 16, 99982)),
     DRINKS_HEALTH(new Vector(100008, 16, 99982), new Vector(100022, 26, 99973)),
-    ARMOR(new Vector(100008, 26, 99985), new Vector(100002, 16, 99994)),
+    ARMOR(new Vector(100008, 26, 99985), new Vector(100022, 16, 99994)),
     FOOD(new Vector(100008, 26, 99997), new Vector(100022, 16, 100006)),
     RANDOM(new Vector(99992, 26, 100009), new Vector(100022, 16, 100023)),
     EPIC(new Vector(99999, 5, 99995), new Vector(100014, 14, 100006));
