@@ -90,7 +90,7 @@ public class PoolStore {
                 itemStack = itemStack.clone();
             }
 
-            createdInventory.setItem(entry.getKey(), this.applyChanges(itemStack)); // clone the item
+            createdInventory.setItem(entry.getKey(), ItemRandomizer.applyChanges(itemStack)); // clone the item
         }
 
         return createdInventory;
@@ -126,22 +126,6 @@ public class PoolStore {
     public PoolType getPoolFromLocation(Location location) {
         return this.poolChests.get(location);
     }
-
-    private ItemStack applyChanges(ItemStack itemStack) {
-        itemStack.editMeta((meta) -> {
-            // random stack size
-            if (itemStack.getMaxStackSize() != 1 && !itemStack.getType().isAir()) {
-                itemStack.setAmount(Randoms.randomNumber(0, 3));
-            }
-            // random durability
-            short maxDurability = itemStack.getType().getMaxDurability();
-            if (maxDurability > 0 && meta instanceof Damageable damageable) {
-                damageable.setDamage(Randoms.randomNumber(10, maxDurability));
-            }
-        });
-        return itemStack;
-    }
-
 
     private boolean isWithinArea(Vector min, Vector max, Location location) {
         double x = location.getX();
