@@ -16,6 +16,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ContainerOverrideCommand extends Command {
@@ -27,10 +28,12 @@ public class ContainerOverrideCommand extends Command {
             POOLS.add(tab.toString());
         }
         POOLS.add("remove");
+        POOLS.add("check");
     }
 
     public ContainerOverrideCommand() {
         super("containeroverride");
+        this.setPermission("containerfaker.command.containeroverride");
     }
 
     @Override
@@ -43,32 +46,46 @@ public class ContainerOverrideCommand extends Command {
         }
 
         String arg1 = args[0];
-        if (arg1.equals("remove")) {
-            if (PoolContainerOverrideHandler.removePoolOverride(block)) {
-                sender.sendMessage(Component.text("Removed pool override!", NamedTextColor.GREEN));
-                OpenedChestManager.INSTANCE.removeChest(block.getLocation());
-            } else {
-                sender.sendMessage(Component.text("Couldn't find a pool override at that location!", NamedTextColor.RED));
-            }
-
-        } else {
-            new BukkitRunnable() {
-
-                @Override
-                public void run() {
-                    player.sendBlockChange(block.getLocation(), Bukkit.createBlockData(Material.GREEN_CONCRETE));
-                    new BukkitRunnable() {
-
-                        @Override
-                        public void run() {
-                            player.sendBlockChange(block.getLocation(), block.getBlockData());
-                        }
-                    }.runTaskLater(Main.INSTANCE, 20);
+        switch (arg1) {
+            case "remove" -> {
+                if (PoolContainerOverrideHandler.removePoolOverride(block)) {
+                    sender.sendMessage(Component.text("Removed pool override!", NamedTextColor.GREEN));
+                    OpenedChestManager.INSTANCE.removeChest(block.getLocation());
+                } else {
+                    sender.sendMessage(Component.text("Couldn't find a pool override at that location!", NamedTextColor.RED));
                 }
-            }.runTask(Main.INSTANCE);
+            }
+            case "check" -> {
+                PoolType type = PoolContainerOverrideHandler.getOverriddenPoolType(block);
+                sender.sendMessage(Component.text("Pool Override: " + type, NamedTextColor.GRAY));
+            }
+            default -> {
+                PoolType poolType;
+                try {
+                    poolType = PoolType.valueOf(arg1.toUpperCase());
+                } catch (Exception e) {
+                    sender.sendMessage(Component.text("Invalid pool provided! Please pick (%s)".formatted(Arrays.toString(PoolType.values())), NamedTextColor.RED));
+                    return true;
+                }
 
-            PoolContainerOverrideHandler.setPoolOverride(block, PoolType.valueOf(arg1));
-            sender.sendMessage(Component.text("Added pool override!", NamedTextColor.GREEN));
+                new BukkitRunnable() {
+
+                    @Override
+                    public void run() {
+                        player.sendBlockChange(block.getLocation(), Bukkit.createBlockData(Material.GREEN_CONCRETE));
+                        new BukkitRunnable() {
+
+                            @Override
+                            public void run() {
+                                player.sendBlockChange(block.getLocation(), block.getBlockData());
+                            }
+                        }.runTaskLater(Main.INSTANCE, 20);
+                    }
+                }.runTask(Main.INSTANCE);
+
+                PoolContainerOverrideHandler.setPoolOverride(block, poolType);
+                sender.sendMessage(Component.text("Added pool override!", NamedTextColor.GREEN));
+            }
         }
 
         return true;

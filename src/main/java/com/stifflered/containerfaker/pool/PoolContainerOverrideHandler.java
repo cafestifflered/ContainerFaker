@@ -1,23 +1,33 @@
 package com.stifflered.containerfaker.pool;
 
 import com.stifflered.containerfaker.Main;
-import com.stifflered.containerfaker.util.Randoms;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.Nullable;
 
 public class PoolContainerOverrideHandler {
 
     private static final String KEY = "block_override%s.%s.%s";
 
     public static PoolType getPoolType(Block block) {
+        PoolType overridden = getOverriddenPoolType(block);
+        if (overridden == null) {
+            return fromMaterial(block.getType());
+        } else {
+            return overridden;
+        }
+    }
+
+    @Nullable
+    public static PoolType getOverriddenPoolType(Block block) {
         Chunk chunk = block.getChunk();
 
         String data = chunk.getPersistentDataContainer().get(getKey(block), PersistentDataType.STRING);
         if (data == null) {
-            return fromMaterial(block.getType());
+            return null;
         } else {
             return PoolType.valueOf(data);
         }
