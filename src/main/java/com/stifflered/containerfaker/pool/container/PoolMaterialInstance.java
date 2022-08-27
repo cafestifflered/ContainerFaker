@@ -15,7 +15,7 @@ public class PoolMaterialInstance implements OpenCallback {
 
     public PoolMaterialInstance(PoolType type, String materialIdentifier, ConfigurationSection configurationSection) {
         Material material = Material.getMaterial(materialIdentifier);
-        if (material.isItem()) {
+        if (!material.isBlock()) {
             throw new IllegalStateException("Invalid block type: " + materialIdentifier);
         }
 
