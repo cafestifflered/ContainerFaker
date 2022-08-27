@@ -1,6 +1,6 @@
 package com.stifflered.containerfaker.pool;
 
-import com.stifflered.containerfaker.Main;
+import com.stifflered.containerfaker.ContainerFaker;
 import com.stifflered.containerfaker.util.BlockLocationIterator;
 import com.stifflered.containerfaker.util.Randoms;
 import org.bukkit.*;
@@ -9,20 +9,18 @@ import org.bukkit.block.Chest;
 import org.bukkit.inventory.BlockInventoryHolder;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.logging.Level;
 
 public class PoolStore {
 
     public static final PoolStore INSTANCE = new PoolStore();
 
-    private final Map<PoolType, List<Inventory>> poolStorage = new EnumMap<>(PoolType.class);
+    private final Map<PoolType, List<Inventory>> poolStorage = new HashMap<>();
     private final Map<Location, PoolType> poolChests = new HashMap<>();
 
     public PoolStore() {
@@ -105,7 +103,7 @@ public class PoolStore {
                 public void run() {
                     type.refreshPool(location.getWorld());
                 }
-            }.runTaskLater(Main.INSTANCE, 1);
+            }.runTaskLater(ContainerFaker.INSTANCE, 1);
         }
     }
 

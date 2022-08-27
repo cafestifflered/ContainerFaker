@@ -9,16 +9,22 @@ import org.bukkit.World;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class Main extends JavaPlugin implements Listener {
+public class ContainerFaker extends JavaPlugin implements Listener {
 
     public static JavaPlugin INSTANCE;
 
     @Override
     public void onEnable() {
+        saveDefaultConfig();
+        reloadConfig();
+
         INSTANCE = this;
         this.register(new PlayerInteractEventListener(), new PlayerCloseInventoryListener(), new PlayerBreakBlockListener(), new PlayerPlaceBlockListener());
         Bukkit.getCommandMap().register("containerfaker", new ContainerOverrideCommand());
-        World world = Bukkit.getWorld(NamespacedKey.minecraft("overworld"));
+
+        World world = Bukkit.getWorld(NamespacedKey.fromString(this.getConfig().getString("world")));
+
+        PoolType.init(world);
         for (PoolType type : PoolType.values()) {
             type.refreshPool(world);
         }
@@ -26,6 +32,7 @@ public class Main extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
+        this.saveConfig();
     }
 
     private void register(Listener... listeners) {

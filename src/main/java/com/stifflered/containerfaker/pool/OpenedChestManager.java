@@ -1,7 +1,5 @@
 package com.stifflered.containerfaker.pool;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -11,6 +9,7 @@ import org.bukkit.inventory.Inventory;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.function.Supplier;
 
 public class OpenedChestManager {
 
@@ -19,33 +18,27 @@ public class OpenedChestManager {
     private final Map<Location, PoolEntry> entryMap = new HashMap<>();
     private final Set<Location> openChests = new HashSet<>();
 
-    public boolean openChest(Player player, Location location, PoolType type) {
-        Location blockLocation = location.toBlockLocation();
-        if (this.openChests.contains(blockLocation)) {
-            return false;
-        }
+    public boolean isOpen(Location location) {
+        return this.openChests.contains(location);
+    }
 
-        Inventory inventory = null;
-        if (this.entryMap.containsKey(blockLocation)) {
-            PoolEntry poolEntry = this.entryMap.get(blockLocation);
-            if (Instant.now().isBefore(poolEntry.time)) {
-                inventory = poolEntry.inventory;
-            }
-        }
-
-        if (inventory == null) {
-            inventory = PoolStore.INSTANCE.randomFromPool(location, type);
-            if (inventory == null) {
-                player.sendMessage(Component.text("Oh no! Currently no registered chests for that pool.", NamedTextColor.RED));
-                return false; // empty pool
-            }
-
-            this.entryMap.put(blockLocation, new PoolEntry(Instant.now().plus(10, ChronoUnit.MINUTES), inventory));
-        }
-
-        player.openInventory(inventory);
+    public void addOpen(Location location) {
         this.openChests.add(location);
-        return true;
+    }
+
+    public Inventory getValidStoredInventoryOrCreate(Location location, Supplier<Inventory> onNew) {
+        if (this.entryMap.containsKey(location)) {
+            OpenedChestManager.PoolEntry poolEntry = this.entryMap.get(location);
+
+            if (Instant.now().isBefore(poolEntry.time)) {
+                return poolEntry.inventory;
+            }
+        }
+
+        Inventory inventory = onNew.get();
+        this.entryMap.put(location, new OpenedChestManager.PoolEntry(Instant.now().plus(10, ChronoUnit.MINUTES), inventory));
+
+        return inventory;
     }
 
     public void closeChest(InventoryCloseEvent event) {

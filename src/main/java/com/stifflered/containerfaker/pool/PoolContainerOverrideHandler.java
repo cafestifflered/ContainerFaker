@@ -1,6 +1,9 @@
 package com.stifflered.containerfaker.pool;
 
-import com.stifflered.containerfaker.Main;
+import com.stifflered.containerfaker.ContainerFaker;
+import com.stifflered.containerfaker.pool.container.ChestOpenCallback;
+import com.stifflered.containerfaker.pool.container.OpenCallback;
+import com.stifflered.containerfaker.pool.container.PoolMaterialInstance;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -12,24 +15,24 @@ public class PoolContainerOverrideHandler {
 
     private static final String KEY = "block_override%s.%s.%s";
 
-    public static PoolType getPoolType(Block block) {
-        PoolType overridden = getOverriddenPoolType(block);
+    public static OpenCallback getPoolType(Block block) {
+        OpenCallback overridden = getOverriddenPoolType(block);
         if (overridden == null) {
-            return fromMaterial(block.getType());
+            return PoolType.get(block.getType());
         } else {
             return overridden;
         }
     }
 
     @Nullable
-    public static PoolType getOverriddenPoolType(Block block) {
+    public static OpenCallback getOverriddenPoolType(Block block) {
         Chunk chunk = block.getChunk();
 
         String data = chunk.getPersistentDataContainer().get(getKey(block), PersistentDataType.STRING);
         if (data == null) {
             return null;
         } else {
-            return PoolType.valueOf(data);
+            return new ChestOpenCallback(PoolType.get(data), true);
         }
     }
 
@@ -46,22 +49,10 @@ public class PoolContainerOverrideHandler {
 
     public static void setPoolOverride(Block block, PoolType type) {
         Chunk chunk = block.getChunk();
-        chunk.getPersistentDataContainer().set(getKey(block), PersistentDataType.STRING, type.name());
-    }
-
-    public static PoolType fromMaterial(Material material) {
-        return switch (material) {
-            case BLAST_FURNACE, SMOKER, DROPPER, RED_SHULKER_BOX, FURNACE -> PoolType.FOOD;
-            case WHITE_SHULKER_BOX, LIGHT_BLUE_SHULKER_BOX, LOOM, MAGENTA_SHULKER_BOX, PURPLE_SHULKER_BOX -> PoolType.ARMOR;
-            case BARREL, CHEST, LIGHT_GRAY_SHULKER_BOX, GRAY_SHULKER_BOX, PINK_SHULKER_BOX, CHISELED_STONE_BRICKS, INFESTED_CHISELED_STONE_BRICKS -> PoolType.RANDOM;
-            case SHULKER_BOX, BLACK_SHULKER_BOX, BROWN_SHULKER_BOX, CYAN_SHULKER_BOX, GREEN_SHULKER_BOX -> PoolType.DRINKS_HEALTH;
-            case BLUE_SHULKER_BOX, YELLOW_SHULKER_BOX, OBSERVER, ORANGE_SHULKER_BOX, LIME_SHULKER_BOX -> PoolType.WEAPONS;
-            case FLETCHING_TABLE, DEAD_TUBE_CORAL, DEAD_HORN_CORAL, DEAD_BRAIN_CORAL, SMITHING_TABLE -> PoolType.JUNK;
-            default -> null;
-        };
+        chunk.getPersistentDataContainer().set(getKey(block), PersistentDataType.STRING, type.getName());
     }
 
     private static NamespacedKey getKey(Block block) {
-        return new NamespacedKey(Main.INSTANCE, KEY.formatted(block.getX(), block.getY(), block.getZ()));
+        return new NamespacedKey(ContainerFaker.INSTANCE, KEY.formatted(block.getX(), block.getY(), block.getZ()));
     }
 }

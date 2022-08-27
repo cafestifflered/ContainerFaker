@@ -1,8 +1,10 @@
 package com.stifflered.containerfaker.listeners;
 
 import com.destroystokyo.paper.MaterialSetTag;
-import com.stifflered.containerfaker.Main;
-import com.stifflered.containerfaker.pool.*;
+import com.stifflered.containerfaker.ContainerFaker;
+import com.stifflered.containerfaker.pool.PoolContainerOverrideHandler;
+import com.stifflered.containerfaker.pool.PoolStore;
+import com.stifflered.containerfaker.pool.container.OpenCallback;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;
@@ -10,16 +12,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import java.util.logging.Level;
-
 public class PlayerInteractEventListener implements Listener {
 
-    private final MaterialSetTag OPENABLES = new MaterialSetTag(NamespacedKey.fromString("openables", Main.INSTANCE))
-            .add(Material.CHEST, Material.TRAPPED_CHEST, Material.BARREL, Material.HOPPER, Material.OBSERVER, Material.DROPPER, Material.DISPENSER, Material.BLAST_FURNACE, Material.FURNACE, Material.FLETCHING_TABLE, Material.LOOM, Material.SMITHING_TABLE, Material.SMOKER, Material.DEAD_BRAIN_CORAL, Material.DEAD_TUBE_CORAL, Material.DEAD_HORN_CORAL)
-            .add(MaterialSetTag.SHULKER_BOXES.getValues())
-            .lock();
-
-    private final MaterialSetTag DISALLOW_BLOCKS = new MaterialSetTag(NamespacedKey.fromString("disallow_blocks", Main.INSTANCE))
+    private final MaterialSetTag DISALLOW_BLOCKS = new MaterialSetTag(NamespacedKey.fromString("disallow_blocks", ContainerFaker.INSTANCE))
             .add(Material.COMPOSTER, Material.BREWING_STAND, Material.DRAGON_EGG)
             .add(MaterialSetTag.BEDS.getValues())
             .lock();
@@ -31,7 +26,7 @@ public class PlayerInteractEventListener implements Listener {
         }
 
         Block block = event.getClickedBlock();
-        PoolType type = PoolContainerOverrideHandler.fromMaterial(block.getType());
+        OpenCallback type = PoolContainerOverrideHandler.getPoolType(block);
         if (type != null) {
             Location location = block.getLocation();
             if (PoolStore.INSTANCE.isPoolChest(location)) {
@@ -40,7 +35,7 @@ public class PlayerInteractEventListener implements Listener {
 
             event.setUseInteractedBlock(Event.Result.DENY);
 
-            OpenedChestManager.INSTANCE.openChest(event.getPlayer(), location, type);
+            type.onOpen(event.getPlayer(), location);
             event.getPlayer().playSound(block.getLocation(), Sound.BLOCK_SHULKER_BOX_OPEN, 0.5f, 1f);
         } else if (DISALLOW_BLOCKS.isTagged(block.getType())) {
             event.setUseInteractedBlock(Event.Result.DENY);

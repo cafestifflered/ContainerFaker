@@ -1,6 +1,6 @@
 package com.stifflered.containerfaker.commands;
 
-import com.stifflered.containerfaker.Main;
+import com.stifflered.containerfaker.ContainerFaker;
 import com.stifflered.containerfaker.pool.OpenedChestManager;
 import com.stifflered.containerfaker.pool.PoolContainerOverrideHandler;
 import com.stifflered.containerfaker.pool.PoolType;
@@ -16,7 +16,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ContainerOverrideCommand extends Command {
@@ -28,7 +27,6 @@ public class ContainerOverrideCommand extends Command {
             POOLS.add(tab.toString());
         }
         POOLS.add("remove");
-        POOLS.add("check");
     }
 
     public ContainerOverrideCommand() {
@@ -55,16 +53,10 @@ public class ContainerOverrideCommand extends Command {
                     sender.sendMessage(Component.text("Couldn't find a pool override at that location!", NamedTextColor.RED));
                 }
             }
-            case "check" -> {
-                PoolType type = PoolContainerOverrideHandler.getOverriddenPoolType(block);
-                sender.sendMessage(Component.text("Pool Override: " + type, NamedTextColor.GRAY));
-            }
             default -> {
-                PoolType poolType;
-                try {
-                    poolType = PoolType.valueOf(arg1.toUpperCase());
-                } catch (Exception e) {
-                    sender.sendMessage(Component.text("Invalid pool provided! Please pick (%s)".formatted(Arrays.toString(PoolType.values())), NamedTextColor.RED));
+                PoolType poolType = PoolType.get(arg1.toUpperCase());
+                if (poolType == null) {
+                    sender.sendMessage(Component.text("Invalid pool provided! Please pick (%s)".formatted(PoolType.values()), NamedTextColor.RED));
                     return true;
                 }
 
@@ -79,9 +71,9 @@ public class ContainerOverrideCommand extends Command {
                             public void run() {
                                 player.sendBlockChange(block.getLocation(), block.getBlockData());
                             }
-                        }.runTaskLater(Main.INSTANCE, 20);
+                        }.runTaskLater(ContainerFaker.INSTANCE, 20);
                     }
-                }.runTask(Main.INSTANCE);
+                }.runTask(ContainerFaker.INSTANCE);
 
                 PoolContainerOverrideHandler.setPoolOverride(block, poolType);
                 sender.sendMessage(Component.text("Added pool override!", NamedTextColor.GREEN));

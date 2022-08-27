@@ -13,17 +13,20 @@ repositories {
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://maven.enginehub.org/repo/")
     maven("https://repo.codemc.io/repository/maven-releases/")
+    maven("https://maven.enginehub.org/repo/")
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.19-R0.1-SNAPSHOT")
+    compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.7")
 }
 
 bukkit {
-    main = "com.stifflered.containerfaker.Main"
+    main = "com.stifflered.containerfaker.ContainerFaker"
     name = rootProject.name
     apiVersion = "1.18"
     version = "1.0.0"
+    depend = listOf("WorldGuard")
 }
 
 tasks {

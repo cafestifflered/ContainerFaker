@@ -1,38 +1,92 @@
 package com.stifflered.containerfaker.pool;
 
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.math.Vector3;
+import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
+import com.sk89q.worldguard.protection.regions.RegionContainer;
+import com.stifflered.containerfaker.ContainerFaker;
+import com.stifflered.containerfaker.pool.container.PoolMaterialInstance;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-public enum PoolType {
+public class PoolType {
 
-    // DONT CHANGE THESE NAMES unless needed!
-    JUNK(new Vector(100004, 26, 99994), new Vector(99990, 16, 99985)),
-    WEAPONS(new Vector(99990, 26, 99973), new Vector(100004, 16, 99982)),
-    DRINKS_HEALTH(new Vector(100008, 16, 99982), new Vector(100022, 26, 99973)),
-    ARMOR(new Vector(100008, 26, 99985), new Vector(100022, 16, 99994)),
-    FOOD(new Vector(100008, 26, 99997), new Vector(100022, 16, 100006)),
-    RANDOM(new Vector(99992, 26, 100009), new Vector(100022, 16, 100023)),
-    EPIC(new Vector(99999, 5, 99995), new Vector(100014, 14, 100006));
+    private static final Map<String, PoolType> REGISTRY = new HashMap<>();
+    private static final Map<Material, PoolMaterialInstance> MATERIAL_POOL_TYPE_MAP = new HashMap<>();
 
-    private final Vector min;
-    private final Vector max;
+    public static void init(World world) {
+        RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
 
-    PoolType(Vector pos1, Vector pos2) {
-        this.min = new Vector(Math.min(pos1.getX(), pos2.getX()), Math.min(pos1.getY(), pos2.getY()), Math.min(pos1.getZ(), pos2.getZ()));
-        this.max = new Vector(Math.max(pos1.getX(), pos2.getX()), Math.max(pos1.getY(), pos2.getY()), Math.max(pos1.getZ(), pos2.getZ()));
+        ConfigurationSection pools = ContainerFaker.INSTANCE.getConfig().getConfigurationSection("pools");
+        for (String key : pools.getKeys(false)) {
+            ProtectedRegion region = container.get(BukkitAdapter.adapt(world)).getRegion(key);
+            ConfigurationSection pool = pools.getConfigurationSection(key);
+            System.out.println(pool);
+
+            System.out.println(key);
+            if (region == null) {
+                ContainerFaker.INSTANCE.getLogger().warning("Could not find worldguard region %s!".formatted(key));
+            } else {
+                PoolType type = new PoolType(region);
+                REGISTRY.put(key, type);
+
+                System.out.println(pool.getKeys(false));
+                System.out.println(pool.getMapList(key));
+                // TODO
+                for (String material : pool.getKeys(false)) {
+                    ConfigurationSection materialConfig = pool.getConfigurationSection(material);
+                    PoolMaterialInstance materialInstance = new PoolMaterialInstance(type, material, materialConfig);
+
+                    MATERIAL_POOL_TYPE_MAP.put(materialInstance.getInstance(), materialInstance);
+                }
+            }
+        }
+    }
+
+    private final ProtectedRegion region;
+
+    PoolType(ProtectedRegion region) {
+        this.region = region;
     }
 
     public Vector getMin() {
-        return min;
+        Vector3 vector3 = region.getMinimumPoint().toVector3();
+        return new Vector(vector3.getX(), vector3.getY(), vector3.getZ());
     }
 
     public Vector getMax() {
-        return max;
+        Vector3 vector3 = region.getMaximumPoint().toVector3();
+        return new Vector(vector3.getX(), vector3.getY(), vector3.getZ());
+    }
+
+    public String getName() {
+        return this.region.getId();
     }
 
     public CompletableFuture<Void> refreshPool(World world) {
         return PoolStore.INSTANCE.loadPool(world, this);
+    }
+
+    public static Collection<PoolType> values() {
+        return REGISTRY.values();
+    }
+
+    @Nullable
+    public static PoolType get(String key) {
+        return REGISTRY.get(key);
+    }
+
+    @Nullable
+    public static PoolMaterialInstance get(Material material) {
+        return MATERIAL_POOL_TYPE_MAP.get(material);
     }
 }
