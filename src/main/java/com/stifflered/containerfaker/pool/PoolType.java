@@ -88,4 +88,9 @@ public class PoolType {
     public static PoolMaterialInstance get(Material material) {
         return MATERIAL_POOL_TYPE_MAP.get(material);
     }
+
+    @Override
+    public String toString() {
+        return region.getId();
+    }
 }

@@ -30,15 +30,16 @@ public class ChestOpenCallback implements OpenCallback {
         }
 
         Inventory inventory = OpenedChestManager.INSTANCE.getValidStoredInventoryOrCreate(location, () -> {
-            if (player.hasPermission("containerfaker.sourcecheck")) {
-                player.sendMessage(Component.text("[DEBUG] Loading inventory from pool at region: " + poolType + ", override: " + isOverride, NamedTextColor.GRAY));
-            }
             for (OpenCallback callback : openCallbacks) {
                 callback.onOpen(player, location);
             }
 
             return PoolStore.INSTANCE.randomFromPool(location, poolType);
         });
+
+        if (player.hasPermission("containerfaker.sourcecheck")) {
+            player.sendMessage(Component.text("Getting inventory from pool at region: " + poolType + ", override: " + isOverride, NamedTextColor.GRAY));
+        }
 
         player.openInventory(inventory);
         OpenedChestManager.INSTANCE.addOpen(location);
