@@ -36,7 +36,6 @@ public class PlayerInteractEventListener implements Listener {
             event.setUseInteractedBlock(Event.Result.DENY);
 
             type.onOpen(event.getPlayer(), location);
-            event.getPlayer().playSound(block.getLocation(), Sound.BLOCK_SHULKER_BOX_OPEN, 0.5f, 1f);
         } else if (DISALLOW_BLOCKS.isTagged(block.getType())) {
             event.setUseInteractedBlock(Event.Result.DENY);
         }
