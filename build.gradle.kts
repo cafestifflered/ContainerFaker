@@ -14,11 +14,13 @@ repositories {
     maven("https://maven.enginehub.org/repo/")
     maven("https://repo.codemc.io/repository/maven-releases/")
     maven("https://maven.enginehub.org/repo/")
+    maven("https://jitpack.io")
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.19-R0.1-SNAPSHOT")
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.7")
+    compileOnly("com.github.LoneDev6:api-itemsadder:3.0.0")
 }
 
 bukkit {
