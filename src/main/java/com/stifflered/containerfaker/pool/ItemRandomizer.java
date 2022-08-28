@@ -23,17 +23,26 @@ public class ItemRandomizer {
             }
 
             // random durability
-            CustomStack customStack = CustomStack.byItemStack(itemStack);
-            if (customStack == null) {
+            boolean isCustomItem;
+            try {
+                CustomStack.class.getName();
+                isCustomItem = CustomStack.byItemStack(itemStack) != null;
+            } catch (Throwable exception) {
+                isCustomItem = false;
+            }
+
+            if (isCustomItem) {
+                CustomStack customStack = CustomStack.byItemStack(itemStack);
+                int maxDurability = customStack.getMaxDurability();
+                if (maxDurability > 0) {
+                    customStack.setDurability(Randoms.randomNumber(10, maxDurability));
+                }
+
+            } else {
                 // Vanilla behavior
                 short maxDurability = itemStack.getType().getMaxDurability();
                 if (maxDurability > 0 && meta instanceof Damageable damageable) {
                     damageable.setDamage(Randoms.randomNumber(10, maxDurability));
-                }
-            } else {
-                int maxDurability = customStack.getMaxDurability();
-                if (maxDurability > 0) {
-                    customStack.setDurability(Randoms.randomNumber(10, maxDurability));
                 }
             }
         });

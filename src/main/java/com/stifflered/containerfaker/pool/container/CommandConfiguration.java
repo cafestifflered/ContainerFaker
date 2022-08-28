@@ -14,13 +14,18 @@ public class CommandConfiguration implements OpenCallback {
     private final Map<SenderType, List<String>> commands = new HashMap<>();
 
     public CommandConfiguration(ConfigurationSection configurationSection) {
+        ConfigurationSection commandSection = configurationSection.getConfigurationSection("commands");
+        if (commandSection == null) {
+            return;
+        }
+
         for (SenderType senderType : SenderType.values()) {
             String key = "as-" + senderType.name().toLowerCase();
-            if (!configurationSection.contains(key)) {
+            if (!commandSection.contains(key)) {
                 continue;
             }
 
-            this.commands.put(senderType, configurationSection.getStringList("commands"));
+            this.commands.put(senderType, commandSection.getStringList(key));
         }
     }
 

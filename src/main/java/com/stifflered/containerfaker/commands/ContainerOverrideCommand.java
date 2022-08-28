@@ -20,15 +20,6 @@ import java.util.List;
 
 public class ContainerOverrideCommand extends Command {
 
-    private static final List<String> POOLS = new ArrayList<>();
-
-    static {
-        for (PoolType tab : PoolType.values()) {
-            POOLS.add(tab.toString());
-        }
-        POOLS.add("remove");
-    }
-
     public ContainerOverrideCommand() {
         super("containeroverride");
         this.setPermission("containerfaker.command.containeroverride");
@@ -54,9 +45,9 @@ public class ContainerOverrideCommand extends Command {
                 }
             }
             default -> {
-                PoolType poolType = PoolType.get(arg1.toUpperCase());
+                PoolType poolType = PoolType.get(arg1);
                 if (poolType == null) {
-                    sender.sendMessage(Component.text("Invalid pool provided! Please pick (%s)".formatted(PoolType.values()), NamedTextColor.RED));
+                    sender.sendMessage(Component.text("Invalid pool provided! Please pick (%s)".formatted(PoolType.keys()), NamedTextColor.RED));
                     return true;
                 }
 
@@ -85,6 +76,12 @@ public class ContainerOverrideCommand extends Command {
 
     @Override
     public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
-        return POOLS;
+        if (args.length > 1) {
+            return List.of();
+        }
+
+        List<String> pools = new ArrayList<>(PoolType.keys());
+        pools.add("remove");
+        return pools;
     }
 }

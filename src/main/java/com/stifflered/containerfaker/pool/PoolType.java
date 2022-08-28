@@ -30,18 +30,13 @@ public class PoolType {
         for (String key : pools.getKeys(false)) {
             ProtectedRegion region = container.get(BukkitAdapter.adapt(world)).getRegion(key);
             ConfigurationSection pool = pools.getConfigurationSection(key);
-            System.out.println(pool);
 
-            System.out.println(key);
             if (region == null) {
                 ContainerFaker.INSTANCE.getLogger().warning("Could not find worldguard region %s!".formatted(key));
             } else {
                 PoolType type = new PoolType(region);
                 REGISTRY.put(key, type);
 
-                System.out.println(pool.getKeys(false));
-                System.out.println(pool.getMapList(key));
-                // TODO
                 for (String material : pool.getKeys(false)) {
                     ConfigurationSection materialConfig = pool.getConfigurationSection(material);
                     PoolMaterialInstance materialInstance = new PoolMaterialInstance(type, material, materialConfig);
@@ -78,6 +73,10 @@ public class PoolType {
 
     public static Collection<PoolType> values() {
         return REGISTRY.values();
+    }
+
+    public static Collection<String> keys() {
+        return REGISTRY.keySet();
     }
 
     @Nullable

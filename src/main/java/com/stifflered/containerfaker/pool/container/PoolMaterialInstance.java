@@ -21,8 +21,7 @@ public class PoolMaterialInstance implements OpenCallback {
 
         this.type = type;
         this.openCallbacks = new OpenCallback[]{
-                new ChestOpenCallback(type, false),
-                new CommandConfiguration(configurationSection)
+                new ChestOpenCallback(type, false, new CommandConfiguration(configurationSection)),
         };
         this.material = material;
     }

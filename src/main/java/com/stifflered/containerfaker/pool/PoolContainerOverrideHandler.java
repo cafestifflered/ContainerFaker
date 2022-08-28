@@ -3,9 +3,7 @@ package com.stifflered.containerfaker.pool;
 import com.stifflered.containerfaker.ContainerFaker;
 import com.stifflered.containerfaker.pool.container.ChestOpenCallback;
 import com.stifflered.containerfaker.pool.container.OpenCallback;
-import com.stifflered.containerfaker.pool.container.PoolMaterialInstance;
 import org.bukkit.Chunk;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.persistence.PersistentDataType;
@@ -32,7 +30,7 @@ public class PoolContainerOverrideHandler {
         if (data == null) {
             return null;
         } else {
-            return new ChestOpenCallback(PoolType.get(data), true);
+            return new ChestOpenCallback(PoolType.get(data), true); // Return a default open callback with that pool
         }
     }
 
