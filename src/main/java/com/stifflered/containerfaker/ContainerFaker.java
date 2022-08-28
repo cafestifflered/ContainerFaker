@@ -32,7 +32,6 @@ public class ContainerFaker extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-        this.saveConfig();
     }
 
     private void register(Listener... listeners) {
