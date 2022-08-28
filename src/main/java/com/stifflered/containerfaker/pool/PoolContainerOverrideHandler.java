@@ -30,7 +30,7 @@ public class PoolContainerOverrideHandler {
         if (data == null) {
             return null;
         } else {
-            return new ChestOpenCallback(PoolType.get(data), true); // Return a default open callback with that pool
+            return new ChestOpenCallback(PoolType.get(data.toLowerCase()), true); // Return a default open callback with that pool
         }
     }
 
