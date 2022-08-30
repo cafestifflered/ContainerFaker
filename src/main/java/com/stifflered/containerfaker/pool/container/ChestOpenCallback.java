@@ -29,13 +29,11 @@ public class ChestOpenCallback implements OpenCallback {
             return;
         }
 
-        Inventory inventory = OpenedChestManager.INSTANCE.getValidStoredInventoryOrCreate(location, () -> {
-            for (OpenCallback callback : openCallbacks) {
-                callback.onOpen(player, location);
-            }
+        Inventory inventory = OpenedChestManager.INSTANCE.getValidStoredInventoryOrCreate(location, () -> PoolStore.INSTANCE.randomFromPool(location, poolType));
 
-            return PoolStore.INSTANCE.randomFromPool(location, poolType);
-        });
+        for (OpenCallback callback : openCallbacks) {
+            callback.onOpen(player, location);
+        }
 
         if (player.hasPermission("containerfaker.sourcecheck")) {
             player.sendMessage(Component.text("Getting inventory from pool at region: " + poolType + ", override: " + isOverride, NamedTextColor.GRAY));
