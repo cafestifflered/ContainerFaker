@@ -23,8 +23,8 @@ public class PoolMaterialInstance implements OpenCallback {
         this.callback = new ChestOpenCallback(
                 new RunnableInventorySource(
                         new InventoryCacheSource(new CompoundInventorySource(
-                                new OverridePoolSource(),
-                                new RegionOverridePoolSource(),
+                                new OverridePoolSource(), // Pool source
+                                new RegionOverridePoolSource(), // Region source
                                 new DirectPooledSource(type)
                         )),
                         new CompoundOpenCallback(

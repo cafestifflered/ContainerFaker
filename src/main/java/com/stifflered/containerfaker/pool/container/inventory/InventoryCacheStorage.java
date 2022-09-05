@@ -33,6 +33,10 @@ public class InventoryCacheStorage {
         }
 
         Inventory inventory = cacheSource.get(player, location);
+        if (inventory == null) {
+            return null;
+        }
+
         this.entryMap.put(location, new PoolEntry(Instant.now().plus(10, ChronoUnit.MINUTES), inventory));
         return inventory;
     }

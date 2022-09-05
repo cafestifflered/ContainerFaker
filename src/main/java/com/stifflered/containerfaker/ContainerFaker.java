@@ -4,6 +4,7 @@ import com.stifflered.containerfaker.commands.ContainerFakerCommand;
 import com.stifflered.containerfaker.commands.ContainerOverrideCommand;
 import com.stifflered.containerfaker.listeners.*;
 import com.stifflered.containerfaker.pool.PoolType;
+import com.stifflered.containerfaker.pool.RegionAccessStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
@@ -12,12 +13,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class ContainerFaker extends JavaPlugin implements Listener {
 
-    public static JavaPlugin INSTANCE;
+    public static ContainerFaker INSTANCE;
+
+    private RegionAccessStorage storage;
 
     @Override
     public void onEnable() {
-        saveDefaultConfig();
-        reloadConfig();
+        this.saveDefaultConfig();
+        this.reloadConfig();
 
         INSTANCE = this;
         this.register(new PlayerInteractEventListener(), new PlayerCloseInventoryListener(), new PlayerBreakBlockListener(), new PlayerPlaceBlockListener());
@@ -30,6 +33,7 @@ public class ContainerFaker extends JavaPlugin implements Listener {
         for (PoolType type : PoolType.values()) {
             type.refreshPool(world);
         }
+        this.storage = new RegionAccessStorage(this.getConfig());
     }
 
     @Override
@@ -42,4 +46,7 @@ public class ContainerFaker extends JavaPlugin implements Listener {
         }
     }
 
+    public RegionAccessStorage getRegionAccessStorage() {
+        return this.storage;
+    }
 }

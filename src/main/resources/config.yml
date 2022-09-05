@@ -1,9 +1,17 @@
 world: "minecraft:overworld"
 region-overrides:
-  # example--
-  # houses:
-  #  BLAST_FURANCE: "weapons"
-  # This will override all BLAST_FURNACES in the HOUSES region with the WEAPONS pool.
+  houses:
+    # This will override all BLAST_FURNACES in the HOUSES region with the WEAPONS pool.
+    BLAST_FURANCE: "weapons"
+# Useful for children regions to exclude.
+# Inactive regions will TAKE PRIORITY
+inactive-regions:
+  - player_town1
+  - player_town2
+active-regions:
+  - spawn
+  - mines
+  - "__global__"
 pools:
   food:
     BLAST_FURNACE: { }
