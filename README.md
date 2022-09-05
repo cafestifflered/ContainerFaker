@@ -11,9 +11,11 @@ Permission: containerfaker.command.containeroverride
 
 ## Example Configuration:
 ```yml
-world: "minecraft:overworld"
+world: "world"
 randomize-durability: true
 random-min-durability: 1
+expire-time: 10
+expire-time-unit: MINUTES
 stackable-items:
   - ARROW
   - FLINT

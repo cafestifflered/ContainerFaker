@@ -1,4 +1,4 @@
-world: "overworld"
+world: "world"
 region-overrides:
   houses:
     # This will override all BLAST_FURNACES in the HOUSES region with the WEAPONS pool.
@@ -9,6 +9,8 @@ inactive-regions:
 active-regions:
 randomize-durability: true
 random-min-durability-percent: 10
+expire-time: 10
+expire-time-unit: MINUTES
 stackable-items:
   - ARROW
   - FLINT
