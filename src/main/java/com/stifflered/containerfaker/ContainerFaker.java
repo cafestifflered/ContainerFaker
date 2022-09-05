@@ -30,7 +30,7 @@ public class ContainerFaker extends JavaPlugin implements Listener {
         Bukkit.getCommandMap().register("containerfaker", new ContainerOverrideCommand());
         Bukkit.getCommandMap().register("containerfaker", new ContainerFakerCommand());
 
-        World world = Bukkit.getWorld(NamespacedKey.fromString(this.getConfig().getString("world")));
+        World world = Bukkit.getWorld(this.getConfig().getString("world"));
 
         PoolType.init(world);
         for (PoolType type : PoolType.values()) {

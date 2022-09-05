@@ -1,8 +1,8 @@
-world: "minecraft:overworld"
+world: "overworld"
 region-overrides:
   houses:
     # This will override all BLAST_FURNACES in the HOUSES region with the WEAPONS pool.
-    BLAST_FURANCE: "weapons"
+    BLAST_FURNACE: "weapons"
 # Useful for children regions to exclude.
 # Inactive regions will TAKE PRIORITY
 inactive-regions:
