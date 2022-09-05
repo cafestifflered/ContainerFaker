@@ -1,6 +1,11 @@
 package com.stifflered.containerfaker.pool.container;
 
 import com.stifflered.containerfaker.pool.PoolType;
+import com.stifflered.containerfaker.pool.container.callback.*;
+import com.stifflered.containerfaker.pool.container.inventory.CompoundInventorySource;
+import com.stifflered.containerfaker.pool.container.inventory.InventoryCacheSource;
+import com.stifflered.containerfaker.pool.container.inventory.RunnableInventorySource;
+import com.stifflered.containerfaker.pool.container.inventory.pool.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -10,28 +15,28 @@ public class PoolMaterialInstance implements OpenCallback {
 
     private final Material material;
 
-    private final OpenCallback[] openCallbacks;
-    private final PoolType type;
+    private final OpenCallback callback;
 
-    public PoolMaterialInstance(PoolType type, String materialIdentifier, ConfigurationSection configurationSection) {
-        Material material = Material.getMaterial(materialIdentifier);
-        if (!material.isBlock()) {
-            throw new IllegalStateException("Invalid block type: " + materialIdentifier);
-        }
-
-        this.type = type;
-        this.openCallbacks = new OpenCallback[]{
-                new ChestOpenCallback(type, false, new CommandConfiguration(configurationSection)),
-        };
+    public PoolMaterialInstance(PoolType type, Material material, ConfigurationSection configurationSection) {
+        this.callback = new ChestOpenCallback(new InventoryCacheSource(
+                new RunnableInventorySource(
+                        new CompoundInventorySource(
+                                new OverridePoolSource(),
+                                new RegionOverridePoolSource(),
+                                new DirectPooledSource(type)
+                        ),
+                        new CompoundOpenCallback(
+                                new CommandConfiguration(configurationSection)
+                        )
+                )
+        ));
         this.material = material;
     }
 
 
     @Override
     public void onOpen(Player player, Location location) {
-        for (OpenCallback callback : this.openCallbacks) {
-            callback.onOpen(player, location);
-        }
+        this.callback.onOpen(player, location);
     }
 
     public Material getInstance() {

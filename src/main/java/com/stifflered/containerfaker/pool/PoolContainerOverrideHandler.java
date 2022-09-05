@@ -1,8 +1,6 @@
 package com.stifflered.containerfaker.pool;
 
 import com.stifflered.containerfaker.ContainerFaker;
-import com.stifflered.containerfaker.pool.container.ChestOpenCallback;
-import com.stifflered.containerfaker.pool.container.OpenCallback;
 import org.bukkit.Chunk;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
@@ -13,24 +11,15 @@ public class PoolContainerOverrideHandler {
 
     private static final String KEY = "block_override%s.%s.%s";
 
-    public static OpenCallback getPoolType(Block block) {
-        OpenCallback overridden = getOverriddenPoolType(block);
-        if (overridden == null) {
-            return PoolType.get(block.getType());
-        } else {
-            return overridden;
-        }
-    }
-
     @Nullable
-    public static OpenCallback getOverriddenPoolType(Block block) {
+    public static PoolType getOverrideAtLocation(Block block) {
         Chunk chunk = block.getChunk();
 
         String data = chunk.getPersistentDataContainer().get(getKey(block), PersistentDataType.STRING);
         if (data == null) {
             return null;
         } else {
-            return new ChestOpenCallback(PoolType.get(data.toLowerCase()), true); // Return a default open callback with that pool
+            return PoolType.get(data.toLowerCase());
         }
     }
 

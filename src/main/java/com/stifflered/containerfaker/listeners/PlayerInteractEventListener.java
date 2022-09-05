@@ -4,7 +4,9 @@ import com.destroystokyo.paper.MaterialSetTag;
 import com.stifflered.containerfaker.ContainerFaker;
 import com.stifflered.containerfaker.pool.PoolContainerOverrideHandler;
 import com.stifflered.containerfaker.pool.PoolStore;
-import com.stifflered.containerfaker.pool.container.OpenCallback;
+import com.stifflered.containerfaker.pool.container.PoolMaterialInstance;
+import com.stifflered.containerfaker.pool.container.callback.OpenCallback;
+import com.stifflered.containerfaker.pool.source.ContainerSource;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;
@@ -26,7 +28,7 @@ public class PlayerInteractEventListener implements Listener {
         }
 
         Block block = event.getClickedBlock();
-        OpenCallback type = PoolContainerOverrideHandler.getPoolType(block);
+        OpenCallback type = ContainerSource.getPool(event.getPlayer(), block.getLocation());
         if (type != null) {
             Location location = block.getLocation();
             if (PoolStore.INSTANCE.isPoolChest(location)) {
@@ -37,7 +39,7 @@ public class PlayerInteractEventListener implements Listener {
 
             type.onOpen(event.getPlayer(), location);
             event.getPlayer().playSound(block.getLocation(), Sound.BLOCK_SHULKER_BOX_OPEN, 0.5f, 1f);
-        } else if (DISALLOW_BLOCKS.isTagged(block.getType())) {
+        } else if (this.DISALLOW_BLOCKS.isTagged(block.getType())) {
             event.setUseInteractedBlock(Event.Result.DENY);
         }
     }

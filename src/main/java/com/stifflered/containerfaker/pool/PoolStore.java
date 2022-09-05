@@ -2,16 +2,13 @@ package com.stifflered.containerfaker.pool;
 
 import com.stifflered.containerfaker.ContainerFaker;
 import com.stifflered.containerfaker.util.BlockLocationIterator;
-import com.stifflered.containerfaker.util.Randoms;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
-import org.bukkit.inventory.BlockInventoryHolder;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -41,57 +38,19 @@ public class PoolStore {
                 Block block = location.getBlock();
                 if (block.getType() == Material.CHEST && block.getState() instanceof Chest chest) {
                     inventories.add(chest.getBlockInventory());
-                    poolChests.put(chest.getLocation(), type);
+                    this.poolChests.put(chest.getLocation(), type);
                 }
             }
         });
     }
 
-    public Inventory randomFromPool(Location location, PoolType type) {
-        if (this.poolStorage.isEmpty()) {
-            return null;
-        }
+    public boolean isPoolEmpty() {
+        return this.poolStorage.isEmpty();
+    }
 
-        Map<Integer, ItemStack> chosenItems = new HashMap<>();
-        Inventory createdInventory = Bukkit.createInventory(new BlockInventoryHolder() {
-
-            @Override
-            public @NotNull Inventory getInventory() {
-                return OpenedChestManager.INSTANCE.getInventory(location);
-            }
-
-            @Override
-            public @NotNull Block getBlock() {
-                return location.getBlock();
-            }
-        }, 27);
-
-        Inventory inventory = Randoms.randomIndex(this.poolStorage.get(type));
-        if (inventory == null) {
-            return null;
-        }
-
-        for (int i = 0; i < 4; i++) {
-            int randomSlot;
-            do {
-                randomSlot = Randoms.randomNumber(0, inventory.getSize() - 1);
-            } while (chosenItems.containsKey(randomSlot));
-
-            chosenItems.put(randomSlot, inventory.getItem(randomSlot));
-        }
-
-        for (Map.Entry<Integer, ItemStack> entry : chosenItems.entrySet()) {
-            ItemStack itemStack = entry.getValue();
-            if (itemStack == null) {
-                itemStack = new ItemStack(Material.AIR);
-            } else {
-                itemStack = itemStack.clone();
-            }
-
-            createdInventory.setItem(entry.getKey(), ItemRandomizer.applyChanges(itemStack)); // clone the item
-        }
-
-        return createdInventory;
+    @Nullable
+    public List<Inventory> getPool(PoolType type) {
+        return this.poolStorage.get(type);
     }
 
     public void removePoolChest(Location location) {
@@ -109,7 +68,7 @@ public class PoolStore {
 
     public void addPossiblePoolChest(Location location) {
         for (PoolType type : PoolType.values()) {
-            if (isWithinArea(type.getMin(), type.getMax(), location)) {
+            if (this.isWithinArea(type.getMin(), type.getMax(), location)) {
                 type.refreshPool(location.getWorld());
                 break;
             }

@@ -1,9 +1,9 @@
 package com.stifflered.containerfaker.commands;
 
 import com.stifflered.containerfaker.ContainerFaker;
-import com.stifflered.containerfaker.pool.OpenedChestManager;
 import com.stifflered.containerfaker.pool.PoolContainerOverrideHandler;
 import com.stifflered.containerfaker.pool.PoolType;
+import com.stifflered.containerfaker.pool.container.inventory.InventoryCacheStorage;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
@@ -39,7 +39,7 @@ public class ContainerOverrideCommand extends Command {
             case "remove" -> {
                 if (PoolContainerOverrideHandler.removePoolOverride(block)) {
                     sender.sendMessage(Component.text("Removed pool override!", NamedTextColor.GREEN));
-                    OpenedChestManager.INSTANCE.removeChest(block.getLocation());
+                    InventoryCacheStorage.INSTANCE.remove(block.getLocation());
                 } else {
                     sender.sendMessage(Component.text("Couldn't find a pool override at that location!", NamedTextColor.RED));
                 }

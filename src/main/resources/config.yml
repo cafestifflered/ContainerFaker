@@ -1,4 +1,9 @@
-world: "overworld"
+world: "minecraft:overworld"
+region-overrides:
+  # example--
+  # houses:
+  #  BLAST_FURANCE: "weapons"
+  # This will override all BLAST_FURNACES in the HOUSES region with the WEAPONS pool.
 pools:
   food:
     BLAST_FURNACE: { }

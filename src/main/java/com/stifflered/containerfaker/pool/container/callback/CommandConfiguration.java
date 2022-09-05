@@ -1,4 +1,4 @@
-package com.stifflered.containerfaker.pool.container;
+package com.stifflered.containerfaker.pool.container.callback;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
