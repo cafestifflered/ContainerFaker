@@ -1,6 +1,7 @@
 package com.stifflered.containerfaker.pool.container.inventory.pool;
 
-import com.stifflered.containerfaker.pool.ItemRandomizer;
+import com.stifflered.containerfaker.ContainerFaker;
+import com.stifflered.containerfaker.pool.item.ItemRandomizer;
 import com.stifflered.containerfaker.pool.PoolStore;
 import com.stifflered.containerfaker.pool.PoolType;
 import com.stifflered.containerfaker.pool.container.inventory.InventorySource;
@@ -64,7 +65,7 @@ public abstract class PooledInventorySource implements InventorySource {
                 itemStack = itemStack.clone();
             }
 
-            createdInventory.setItem(entry.getKey(), ItemRandomizer.applyChanges(itemStack)); // clone the item
+            createdInventory.setItem(entry.getKey(), ContainerFaker.INSTANCE.getItemRandomizer().modify(itemStack)); // clone the item
         }
 
         return createdInventory;

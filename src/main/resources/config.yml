@@ -6,12 +6,17 @@ region-overrides:
 # Useful for children regions to exclude.
 # Inactive regions will TAKE PRIORITY
 inactive-regions:
-  - player_town1
-  - player_town2
 active-regions:
-  - spawn
-  - mines
-  - "__global__"
+randomize-durability: true
+random-min-durability-percent: 10
+stackable-items:
+  - ARROW
+  - FLINT
+  - FEATHER
+  - BONE
+  - STICK
+stack-minimum: 0
+stack-maximum: 99
 pools:
   food:
     BLAST_FURNACE: { }

@@ -5,6 +5,8 @@ import com.stifflered.containerfaker.commands.ContainerOverrideCommand;
 import com.stifflered.containerfaker.listeners.*;
 import com.stifflered.containerfaker.pool.PoolType;
 import com.stifflered.containerfaker.pool.RegionAccessStorage;
+import com.stifflered.containerfaker.pool.item.ItemModifier;
+import com.stifflered.containerfaker.pool.item.ItemRandomizer;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
@@ -16,6 +18,7 @@ public class ContainerFaker extends JavaPlugin implements Listener {
     public static ContainerFaker INSTANCE;
 
     private RegionAccessStorage storage;
+    private ItemModifier itemModifier;
 
     @Override
     public void onEnable() {
@@ -34,6 +37,7 @@ public class ContainerFaker extends JavaPlugin implements Listener {
             type.refreshPool(world);
         }
         this.storage = new RegionAccessStorage(this.getConfig());
+        this.itemModifier = new ItemRandomizer(this.getConfig());
     }
 
     @Override
@@ -48,5 +52,9 @@ public class ContainerFaker extends JavaPlugin implements Listener {
 
     public RegionAccessStorage getRegionAccessStorage() {
         return this.storage;
+    }
+
+    public ItemModifier getItemRandomizer() {
+        return this.itemModifier;
     }
 }

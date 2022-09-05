@@ -12,6 +12,16 @@ Permission: containerfaker.command.containeroverride
 ## Example Configuration:
 ```yml
 world: "minecraft:overworld"
+randomize-durability: true
+random-min-durability: 1
+stackable-items:
+  - ARROW
+  - FLINT
+  - FEATHER
+  - BONE
+  - STICK
+stack-minimum: 0
+stack-maximum: 99
 region-overrides:
   houses:
     # This will override all BLAST_FURNACES in the HOUSES region with the WEAPONS pool.
