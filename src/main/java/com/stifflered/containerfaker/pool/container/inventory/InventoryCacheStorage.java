@@ -37,6 +37,10 @@ public class InventoryCacheStorage {
         return inventory;
     }
 
+    public void clear() {
+        this.entryMap.clear();
+    }
+
     public record PoolEntry(Instant time, Inventory inventory) {
     }
 

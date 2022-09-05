@@ -1,5 +1,6 @@
 package com.stifflered.containerfaker;
 
+import com.stifflered.containerfaker.commands.ContainerFakerCommand;
 import com.stifflered.containerfaker.commands.ContainerOverrideCommand;
 import com.stifflered.containerfaker.listeners.*;
 import com.stifflered.containerfaker.pool.PoolType;
@@ -21,6 +22,7 @@ public class ContainerFaker extends JavaPlugin implements Listener {
         INSTANCE = this;
         this.register(new PlayerInteractEventListener(), new PlayerCloseInventoryListener(), new PlayerBreakBlockListener(), new PlayerPlaceBlockListener());
         Bukkit.getCommandMap().register("containerfaker", new ContainerOverrideCommand());
+        Bukkit.getCommandMap().register("containerfaker", new ContainerFakerCommand());
 
         World world = Bukkit.getWorld(NamespacedKey.fromString(this.getConfig().getString("world")));
 

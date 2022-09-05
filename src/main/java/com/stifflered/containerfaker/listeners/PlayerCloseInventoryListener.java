@@ -3,6 +3,7 @@ package com.stifflered.containerfaker.listeners;
 import com.stifflered.containerfaker.pool.OpenedChestManager;
 import com.stifflered.containerfaker.pool.PoolStore;
 import com.stifflered.containerfaker.pool.PoolType;
+import com.stifflered.containerfaker.pool.container.inventory.InventoryCacheStorage;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,6 +23,7 @@ public class PlayerCloseInventoryListener implements Listener {
             if (store.isPoolChest(location)) {
                 PoolType type = store.getPoolFromLocation(location);
                 type.refreshPool(location.getWorld());
+                InventoryCacheStorage.INSTANCE.clear();
             }
         }
 
