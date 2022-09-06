@@ -26,9 +26,9 @@ public class PlayerInteractEventListener implements Listener {
         }
 
         Block block = event.getClickedBlock();
-        OpenCallback type = ContainerSource.getPool(event.getPlayer(), block.getLocation());
+        Location location = block.getLocation();
+        OpenCallback type = ContainerSource.getPool(event.getPlayer(), location);
         if (type != null) {
-            Location location = block.getLocation();
             if (PoolStore.INSTANCE.isPoolChest(location)) {
                 return;
             }

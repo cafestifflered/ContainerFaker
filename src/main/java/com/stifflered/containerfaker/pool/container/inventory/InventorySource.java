@@ -20,6 +20,12 @@ public interface InventorySource {
         }
     }
 
+    static void debug(Player player, InventorySource source, String str) {
+        if (player.hasPermission("containerfaker.sourcecheck")) {
+            player.sendMessage(Component.text("Extra Debug for %s: %s".formatted(source, str), NamedTextColor.GRAY));
+        }
+    }
+
     static void debug(Player player, InventorySource source, PoolType type) {
         if (player.hasPermission("containerfaker.sourcecheck")) {
             player.sendMessage(Component.text("Fetching inventory (pooltype: %s) from %s".formatted(type, source), NamedTextColor.GRAY));

@@ -1,4 +1,4 @@
-world: "world"
+world: "minecraft:overworld"
 region-overrides:
   houses:
     # This will override all BLAST_FURNACES in the HOUSES region with the WEAPONS pool.
