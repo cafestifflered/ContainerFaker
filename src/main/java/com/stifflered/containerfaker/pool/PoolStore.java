@@ -2,7 +2,10 @@ package com.stifflered.containerfaker.pool;
 
 import com.stifflered.containerfaker.ContainerFaker;
 import com.stifflered.containerfaker.util.BlockLocationIterator;
-import org.bukkit.*;
+import com.stifflered.containerfaker.util.ChunkAccessLock;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.inventory.Inventory;
@@ -29,7 +32,8 @@ public class PoolStore {
     public CompletableFuture<Void> loadPool(World world, PoolType type) {
         Location min = type.getMin().toLocation(world);
         Location max = type.getMax().toLocation(world);
-        return loadChunksBetween(min, max).thenAccept((v) -> {
+        ChunkAccessLock chunkAccessLock = ChunkAccessLock.squared(min, max, min.getWorld());
+        return chunkAccessLock.load().thenAccept((v) -> {
             List<Inventory> inventories = new ArrayList<>();
             this.poolStorage.put(type, inventories);
             this.poolChests.values().removeIf((typeToRemove) -> typeToRemove == type);
@@ -41,6 +45,8 @@ public class PoolStore {
                     this.poolChests.put(chest.getLocation(), type);
                 }
             }
+
+            chunkAccessLock.close();
         });
     }
 
@@ -91,21 +97,4 @@ public class PoolStore {
 
         return x >= min.getX() && x <= max.getX() && y >= min.getY() && y <= max.getY() && z >= min.getZ() && z <= max.getZ();
     }
-
-    private static CompletableFuture<Void> loadChunksBetween(Location location1, Location location2) {
-        List<CompletableFuture<Chunk>> futures = new ArrayList<>();
-        int minX = Math.min(location1.getBlockX(), location2.getBlockX());
-        int maxX = Math.max(location1.getBlockX(), location2.getBlockX());
-        int minZ = Math.min(location1.getBlockZ(), location2.getBlockZ());
-        int maxZ = Math.max(location1.getBlockZ(), location2.getBlockZ());
-
-        for (int x = minX; x < maxX; x++) {
-            for (int z = minZ; z < maxZ; z++) {
-                futures.add(location1.getWorld().getChunkAtAsync(x >> 4, z >> 4));
-            }
-        }
-
-        return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
-    }
-
 }
