@@ -20,7 +20,7 @@ public class MMOItemModifier implements ItemModifier {
 
             MMOItem mmoitem = MMOItems.plugin.getMMOItem(itemType, identifier);
             if (mmoitem != null) {
-                ItemStack built = mmoitem.newBuilder().build();;
+                ItemStack built = mmoitem.newBuilder().build();
                 if (built == null) {
                     built = new ItemStack(Material.AIR);
                 }
