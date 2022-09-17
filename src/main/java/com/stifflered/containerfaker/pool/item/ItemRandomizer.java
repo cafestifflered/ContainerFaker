@@ -1,6 +1,7 @@
 package com.stifflered.containerfaker.pool.item;
 
 import com.stifflered.containerfaker.pool.item.impl.DurabilityItemModifier;
+import com.stifflered.containerfaker.pool.item.impl.MMOItemModifier;
 import com.stifflered.containerfaker.pool.item.impl.StackableItemModifier;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
@@ -12,6 +13,7 @@ public class ItemRandomizer implements ItemModifier {
 
     public ItemRandomizer(ConfigurationSection section) {
         this.itemModifiers = new ItemModifier[]{
+                new MMOItemModifier(),
                 new DurabilityItemModifier(section),
                 new StackableItemModifier(section)
         };

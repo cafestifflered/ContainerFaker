@@ -1,5 +1,6 @@
 package com.stifflered.containerfaker.pool.container.inventory;
 
+import com.google.common.base.Suppliers;
 import com.stifflered.containerfaker.ContainerFaker;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

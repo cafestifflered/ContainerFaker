@@ -15,12 +15,14 @@ repositories {
     maven("https://repo.codemc.io/repository/maven-releases/")
     maven("https://maven.enginehub.org/repo/")
     maven("https://jitpack.io")
+    maven("https://nexus.phoenixdvpt.fr/repository/maven-public/")
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.19-R0.1-SNAPSHOT")
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.7")
     compileOnly("com.github.LoneDev6:api-itemsadder:3.0.0")
+    compileOnly("net.Indyuce:MMOItems-API:6.7.5-SNAPSHOT")
 }
 
 bukkit {
@@ -29,6 +31,7 @@ bukkit {
     apiVersion = "1.18"
     version = "1.0.0"
     depend = listOf("WorldGuard")
+    softDepend = listOf("MMOItems")
 }
 
 tasks {
