@@ -23,6 +23,7 @@ dependencies {
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.7")
     compileOnly("com.github.LoneDev6:api-itemsadder:3.0.0")
     compileOnly("net.Indyuce:MMOItems-API:6.7.5-SNAPSHOT")
+    compileOnly("io.lumine:MythicLib-dist:1.3.4-SNAPSHOT")
 }
 
 bukkit {
