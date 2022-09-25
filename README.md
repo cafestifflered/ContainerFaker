@@ -29,7 +29,7 @@ region-overrides:
     # This will override all BLAST_FURNACES in the HOUSES region with the WEAPONS pool.
     BLAST_FURANCE: "weapons"
 inactive-regions:
-# Inactive regions take priority over active regions
+  # Inactive regions take priority over active regions
   - player_town1
   - player_town2
 active-regions:
