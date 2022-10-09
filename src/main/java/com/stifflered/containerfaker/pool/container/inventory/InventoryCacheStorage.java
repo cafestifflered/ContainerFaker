@@ -1,10 +1,10 @@
 package com.stifflered.containerfaker.pool.container.inventory;
 
-import com.google.common.base.Suppliers;
 import com.stifflered.containerfaker.ContainerFaker;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -23,7 +23,7 @@ public class InventoryCacheStorage {
         if (this.isChestMirror(location)) {
             PoolEntry poolEntry = this.entryMap.get(location);
 
-            if (Instant.now().isBefore(poolEntry.time)) {
+            if (poolEntry.time == null || Instant.now().isBefore(poolEntry.time)) {
                 InventorySource.debug(player, cacheSource, "Using cached inventory %s %s".formatted(Instant.now(), poolEntry.time));
                 return poolEntry.inventory;
             }
@@ -35,7 +35,12 @@ public class InventoryCacheStorage {
             return null;
         }
 
-        Instant instant = Instant.now().plus(this.amount, this.unit);
+        Instant instant;
+        if (this.amount == -1) {
+            instant = null;
+        } else {
+            instant = Instant.now().plus(this.amount, this.unit);
+        }
         this.entryMap.put(location, new PoolEntry(instant, inventory));
         InventorySource.debug(player, cacheSource, "Caching new inventory until %s".formatted(instant));
         return inventory;
@@ -53,7 +58,7 @@ public class InventoryCacheStorage {
         this.entryMap.clear();
     }
 
-    public record PoolEntry(Instant time, Inventory inventory) {
+    public record PoolEntry(@Nullable Instant time, Inventory inventory) {
     }
 
 }

@@ -14,6 +14,7 @@ Permission: containerfaker.command.containeroverride
 world: "world"
 randomize-durability: true
 random-min-durability: 1
+# Set to -1 to disable this
 expire-time: 10
 expire-time-unit: MINUTES
 stackable-items:
