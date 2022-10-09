@@ -12,12 +12,27 @@ Permission: containerfaker.command.containeroverride
 ## Example Configuration:
 ```yml
 world: "world"
-randomize-durability: true
-random-min-durability: 1
+inactive-regions:
+  # Inactive regions take priority over active regions and region overrides
+  - player_town1
+  - player_town2
+active-regions:
+  - spawn
+  - mines
+  - `__global__`
+region-overrides:
+  houses:
+    # This will override all BLAST_FURNACES in the HOUSES region with the WEAPONS pool.
+    BLAST_FURANCE: "weapons"
+    
 # Set to -1 to disable this
 expire-time: 10
 expire-time-unit: MINUTES
+
+randomize-durability: true
+random-min-durability: 1
 stackable-items:
+  # Use vanilla item material
   - ARROW
   - FLINT
   - FEATHER
@@ -25,17 +40,7 @@ stackable-items:
   - STICK
 stack-minimum: 0
 stack-maximum: 99
-region-overrides:
-  houses:
-    # This will override all BLAST_FURNACES in the HOUSES region with the WEAPONS pool.
-    BLAST_FURANCE: "weapons"
-active-regions:
-  - spawn
-  - mines
-  - `__global__`
-inactive-regions:
-  - player_town1
-  - player_town2
+
 pools:
   food:
     BLAST_FURNACE:
