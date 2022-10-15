@@ -29,7 +29,8 @@ public class PoolStore {
         }
     }
 
-    public CompletableFuture<Void> loadPool(World world, PoolType type) {
+    public CompletableFuture<Void> loadPool(PoolType type) {
+        World world = type.getWorld();
         Location min = type.getMin().toLocation(world);
         Location max = type.getMax().toLocation(world);
         ChunkAccessLock chunkAccessLock = ChunkAccessLock.squared(min, max, min.getWorld());
@@ -66,7 +67,7 @@ public class PoolStore {
 
                 @Override
                 public void run() {
-                    type.refreshPool(location.getWorld());
+                    type.refreshPool();
                 }
             }.runTaskLater(ContainerFaker.INSTANCE, 1);
         }
@@ -75,7 +76,7 @@ public class PoolStore {
     public void addPossiblePoolChest(Location location) {
         for (PoolType type : PoolType.values()) {
             if (this.isWithinArea(type.getMin(), type.getMax(), location)) {
-                type.refreshPool(location.getWorld());
+                type.refreshPool();
                 break;
             }
         }

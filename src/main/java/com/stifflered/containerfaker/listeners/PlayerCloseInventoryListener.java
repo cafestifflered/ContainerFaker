@@ -22,7 +22,7 @@ public class PlayerCloseInventoryListener implements Listener {
             PoolStore store = PoolStore.INSTANCE;
             if (store.isPoolChest(location)) {
                 PoolType type = store.getPoolFromLocation(location);
-                type.refreshPool(location.getWorld());
+                type.refreshPool();
                 InventoryCacheStorage.INSTANCE.clear();
             }
         }

@@ -8,6 +8,7 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.stifflered.containerfaker.ContainerFaker;
 import com.stifflered.containerfaker.pool.container.PoolMaterialInstance;
 import com.stifflered.containerfaker.pool.container.inventory.pool.RegionOverridePoolSource;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
@@ -25,18 +26,26 @@ public class PoolType {
     private static final Map<Material, PoolMaterialInstance> MATERIAL_POOL_INSTANCE_TYPE_MAP = new HashMap<>();
     private static final Map<Material, PoolType> MATERIAL_POOL_TYPE_MAP = new HashMap<>();
 
-    public static void init(World world) {
+    public static void init() {
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
 
         ConfigurationSection pools = ContainerFaker.INSTANCE.getConfig().getConfigurationSection("pools");
         for (String key : pools.getKeys(false)) {
-            ProtectedRegion region = container.get(BukkitAdapter.adapt(world)).getRegion(key);
+            ProtectedRegion region = null;
+            World selectedWorld = null;
+            for (World activeWorld : Bukkit.getWorlds()) {
+                region = container.get(BukkitAdapter.adapt(activeWorld)).getRegion(key);
+                if (region != null) {
+                    selectedWorld = activeWorld;
+                    break;
+                }
+            }
             ConfigurationSection pool = pools.getConfigurationSection(key);
 
             if (region == null) {
                 ContainerFaker.INSTANCE.getLogger().warning("Could not find worldguard region %s!".formatted(key));
             } else {
-                PoolType type = new PoolType(region);
+                PoolType type = new PoolType(selectedWorld, region);
                 REGISTRY.put(key, type);
 
                 for (String materialIdentifier : pool.getKeys(false)) {
@@ -57,10 +66,11 @@ public class PoolType {
         RegionOverridePoolSource.boostrap();
     }
 
-
+    private final World world;
     private final ProtectedRegion region;
 
-    PoolType(ProtectedRegion region) {
+    PoolType(World world, ProtectedRegion region) {
+        this.world = world;
         this.region = region;
     }
 
@@ -78,8 +88,16 @@ public class PoolType {
         return this.region.getId();
     }
 
-    public CompletableFuture<Void> refreshPool(World world) {
-        return PoolStore.INSTANCE.loadPool(world, this);
+    public ProtectedRegion getRegion() {
+        return this.region;
+    }
+
+    public World getWorld() {
+        return this.world;
+    }
+
+    public CompletableFuture<Void> refreshPool() {
+        return PoolStore.INSTANCE.loadPool(this);
     }
 
     public static Collection<PoolType> values() {

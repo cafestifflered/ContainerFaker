@@ -11,7 +11,6 @@ Permission: containerfaker.command.containeroverride
 
 ## Example Configuration:
 ```yml
-world: "world"
 inactive-regions:
   # Inactive regions take priority over active regions and region overrides
   - player_town1
