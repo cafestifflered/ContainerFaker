@@ -1,10 +1,10 @@
 package com.stifflered.containerfaker.pool.container.inventory.pool;
 
 import com.stifflered.containerfaker.ContainerFaker;
-import com.stifflered.containerfaker.pool.item.ItemRandomizer;
 import com.stifflered.containerfaker.pool.PoolStore;
 import com.stifflered.containerfaker.pool.PoolType;
 import com.stifflered.containerfaker.pool.container.inventory.InventorySource;
+import com.stifflered.containerfaker.util.ItemUtil;
 import com.stifflered.containerfaker.util.Randoms;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -18,9 +18,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.logging.Level;
 
 public abstract class PooledInventorySource implements InventorySource {
+
+    private static final int UNSAFE_ITERATION_AMOUNT = 999999;
 
     @Nullable
     public abstract PoolType getType(Player player, Location location);
@@ -48,13 +53,23 @@ public abstract class PooledInventorySource implements InventorySource {
             return null;
         }
 
+        Set<ItemStack> alreadyChosen = new HashSet<>();
         for (int i = 0; i < 4; i++) {
             int randomSlot;
-            do {
-                randomSlot = Randoms.randomNumber(0, inventory.getSize() - 1);
-            } while (chosenItems.containsKey(randomSlot));
 
-            chosenItems.put(randomSlot, inventory.getItem(randomSlot));
+            int iterations = 0;
+            do {
+                iterations++;
+                randomSlot = Randoms.randomNumber(0, inventory.getSize() - 1);
+                if (iterations > UNSAFE_ITERATION_AMOUNT) {
+                    Bukkit.getLogger().log(Level.WARNING, "Dangerous iteration amount for " + this + " for pooled inventory at " + location + ". Check to make sure there are enough valid items!");
+                    break;
+                }
+            } while (chosenItems.containsKey(randomSlot) || this.isSingleDuplicate(alreadyChosen, inventory.getItem(randomSlot)));
+
+            ItemStack itemStack = inventory.getItem(randomSlot);
+            chosenItems.put(randomSlot, itemStack);
+            alreadyChosen.add(itemStack);
         }
 
         for (Map.Entry<Integer, ItemStack> entry : chosenItems.entrySet()) {
@@ -69,6 +84,18 @@ public abstract class PooledInventorySource implements InventorySource {
         }
 
         return createdInventory;
+    }
+
+    private boolean isSingleDuplicate(Set<ItemStack> chosen, ItemStack toChoose) {
+        if (toChoose == null) {
+            return false;
+        }
+
+        if (chosen.contains(toChoose)) {
+            return ItemUtil.isSingle(toChoose.getItemMeta());
+        }
+
+        return false;
     }
 
     private static class MutableBlockInventoryHolder implements BlockInventoryHolder {
