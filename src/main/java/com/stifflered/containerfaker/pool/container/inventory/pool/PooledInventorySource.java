@@ -42,8 +42,6 @@ public abstract class PooledInventorySource implements InventorySource {
         }
         InventorySource.debug(player, this, poolType);
 
-        Map<Integer, ItemStack> chosenItems = new HashMap<>();
-
         MutableBlockInventoryHolder mutableBlockInventoryHolder = new MutableBlockInventoryHolder(location.getBlock());
         Inventory createdInventory = Bukkit.createInventory(mutableBlockInventoryHolder, 27);
         mutableBlockInventoryHolder.setInventory(createdInventory);
@@ -54,7 +52,8 @@ public abstract class PooledInventorySource implements InventorySource {
         }
 
         Set<ItemStack> alreadyChosen = new HashSet<>();
-        for (int i = 0; i < 4; i++) {
+        Map<Integer, ItemStack> chosenItems = new HashMap<>();
+        for (int i = 0; i < poolType.getRandomCount(); i++) {
             int randomSlot;
 
             int iterations = 0;

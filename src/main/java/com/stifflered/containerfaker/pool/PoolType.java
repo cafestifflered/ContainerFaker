@@ -8,6 +8,7 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.stifflered.containerfaker.ContainerFaker;
 import com.stifflered.containerfaker.pool.container.PoolMaterialInstance;
 import com.stifflered.containerfaker.pool.container.inventory.pool.RegionOverridePoolSource;
+import com.stifflered.containerfaker.util.Randoms;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -45,11 +46,12 @@ public class PoolType {
             if (region == null) {
                 ContainerFaker.INSTANCE.getLogger().warning("Could not find worldguard region %s!".formatted(key));
             } else {
-                PoolType type = new PoolType(selectedWorld, region);
+                PoolType type = new PoolType(selectedWorld, region, pool);
                 REGISTRY.put(key, type);
 
-                for (String materialIdentifier : pool.getKeys(false)) {
-                    ConfigurationSection materialConfig = pool.getConfigurationSection(materialIdentifier);
+                ConfigurationSection blocks = pool.getConfigurationSection("blocks");
+                for (String materialIdentifier : blocks.getKeys(false)) {
+                    ConfigurationSection materialConfig = blocks.getConfigurationSection(materialIdentifier);
                     Material material = Material.getMaterial(materialIdentifier);
                     if (!material.isBlock()) {
                         throw new IllegalStateException("Invalid block type: " + materialIdentifier);
@@ -68,10 +70,14 @@ public class PoolType {
 
     private final World world;
     private final ProtectedRegion region;
+    private final int min;
+    private final int max;
 
-    PoolType(World world, ProtectedRegion region) {
+    PoolType(World world, ProtectedRegion region, ConfigurationSection section) {
         this.world = world;
         this.region = region;
+        this.min = section.getInt("min-picked-slots");
+        this.max = section.getInt("max-picked-slots");
     }
 
     public Vector getMin() {
@@ -125,5 +131,9 @@ public class PoolType {
     @Override
     public String toString() {
         return this.region.getId();
+    }
+
+    public int getRandomCount() {
+        return Randoms.randomNumber(this.min, this.max);
     }
 }
