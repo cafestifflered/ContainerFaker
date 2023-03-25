@@ -1,6 +1,6 @@
 package com.stifflered.containerfaker.commands;
 
-import com.stifflered.containerfaker.pool.container.inventory.InventoryCacheStorage;
+import com.stifflered.containerfaker.pool.container.inventory.cache.InventoryCacheStorage;
 import com.stifflered.containerfaker.util.ItemUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;

@@ -3,7 +3,7 @@ package com.stifflered.containerfaker.listeners;
 import com.stifflered.containerfaker.pool.OpenedChestManager;
 import com.stifflered.containerfaker.pool.PoolStore;
 import com.stifflered.containerfaker.pool.PoolType;
-import com.stifflered.containerfaker.pool.container.inventory.InventoryCacheStorage;
+import com.stifflered.containerfaker.pool.container.inventory.cache.InventoryCacheStorage;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

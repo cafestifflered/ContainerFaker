@@ -3,7 +3,7 @@ package com.stifflered.containerfaker.commands;
 import com.stifflered.containerfaker.ContainerFaker;
 import com.stifflered.containerfaker.pool.PoolContainerOverrideHandler;
 import com.stifflered.containerfaker.pool.PoolType;
-import com.stifflered.containerfaker.pool.container.inventory.InventoryCacheStorage;
+import com.stifflered.containerfaker.pool.container.inventory.cache.InventoryCacheStorage;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;

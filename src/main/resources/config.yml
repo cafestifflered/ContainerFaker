@@ -18,6 +18,7 @@ stackable-items:
   - STICK
 stack-minimum: 0
 stack-maximum: 99
+per-player-pools: false
 pools:
   food:
     blocks:
@@ -28,6 +29,7 @@ pools:
       FURNACE: { }
     min-picked-slots: 4
     max-picked-slots: 4
+    fill-strategy: "SLOTTED_RANDOM"
   armor:
     blocks:
       WHITE_SHULKER_BOX: { }
@@ -37,6 +39,7 @@ pools:
       PURPLE_SHULKER_BOX: { }
     min-picked-slots: 4
     max-picked-slots: 4
+    fill-strategy: "SLOTTED_RANDOM"
   random:
     blocks:
       BARREL: { }
@@ -48,6 +51,7 @@ pools:
       INFESTED_CHISELED_STONE_BRICKS: { }
     min-picked-slots: 4
     max-picked-slots: 4
+    fill-strategy: "SLOTTED_RANDOM"
   drinks_health:
     blocks:
       SHULKER_BOX: { }
@@ -57,6 +61,7 @@ pools:
       GREEN_SHULKER_BOX: { }
     min-picked-slots: 4
     max-picked-slots: 4
+    fill-strategy: "SLOTTED_RANDOM"
   weapons:
     blocks:
       BLUE_SHULKER_BOX: { }
@@ -66,6 +71,7 @@ pools:
       LIME_SHULKER_BOX: { }
     min-picked-slots: 4
     max-picked-slots: 4
+    fill-strategy: "SLOTTED_RANDOM"
   junk:
     blocks:
       FLETCHING_TABLE: { }
@@ -75,3 +81,4 @@ pools:
       SMITHING_TABLE: { }
     min-picked-slots: 4
     max-picked-slots: 4
+    fill-strategy: "SLOTTED_RANDOM"

@@ -3,7 +3,7 @@ package com.stifflered.containerfaker.pool.container;
 import com.stifflered.containerfaker.pool.PoolType;
 import com.stifflered.containerfaker.pool.container.callback.*;
 import com.stifflered.containerfaker.pool.container.inventory.CompoundInventorySource;
-import com.stifflered.containerfaker.pool.container.inventory.InventoryCacheSource;
+import com.stifflered.containerfaker.pool.container.inventory.cache.InventoryCacheSource;
 import com.stifflered.containerfaker.pool.container.inventory.RunnableInventorySource;
 import com.stifflered.containerfaker.pool.container.inventory.pool.DirectPooledSource;
 import com.stifflered.containerfaker.pool.container.inventory.pool.OverridePoolSource;

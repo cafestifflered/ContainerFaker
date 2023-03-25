@@ -1,5 +1,6 @@
-package com.stifflered.containerfaker.pool.container.inventory;
+package com.stifflered.containerfaker.pool.container.inventory.cache;
 
+import com.stifflered.containerfaker.pool.container.inventory.InventorySource;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;

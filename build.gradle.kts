@@ -15,15 +15,15 @@ repositories {
     maven("https://repo.codemc.io/repository/maven-releases/")
     maven("https://maven.enginehub.org/repo/")
     maven("https://jitpack.io")
-    maven("https://nexus.phoenixdvpt.fr/repository/maven-public/")
+    maven("https://nexus.phoenixdevt.fr/repository/maven-public/")
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.19-R0.1-SNAPSHOT")
     compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.7")
     compileOnly("com.github.LoneDev6:api-itemsadder:3.0.0")
-    compileOnly("net.Indyuce:MMOItems-API:6.7.5-SNAPSHOT")
-    compileOnly("io.lumine:MythicLib-dist:1.3.4-SNAPSHOT")
+    compileOnly("net.Indyuce:MMOItems-API:6.9.2-SNAPSHOT")
+    compileOnly("io.lumine:MythicLib-dist:1.5.1-SNAPSHOT")
 }
 
 bukkit {

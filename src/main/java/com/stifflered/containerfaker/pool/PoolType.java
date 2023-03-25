@@ -8,6 +8,8 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.stifflered.containerfaker.ContainerFaker;
 import com.stifflered.containerfaker.pool.container.PoolMaterialInstance;
 import com.stifflered.containerfaker.pool.container.inventory.pool.RegionOverridePoolSource;
+import com.stifflered.containerfaker.pool.fill.FillStrategy;
+import com.stifflered.containerfaker.pool.fill.FillType;
 import com.stifflered.containerfaker.util.Randoms;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -72,12 +74,14 @@ public class PoolType {
     private final ProtectedRegion region;
     private final int min;
     private final int max;
+    private final FillStrategy strategy;
 
     PoolType(World world, ProtectedRegion region, ConfigurationSection section) {
         this.world = world;
         this.region = region;
         this.min = section.getInt("min-picked-slots");
         this.max = section.getInt("max-picked-slots");
+        this.strategy = FillType.valueOf(section.getString("fill-strategy", FillType.SLOTTED_RANDOM.name())).getStrategy();
     }
 
     public Vector getMin() {
@@ -135,5 +139,9 @@ public class PoolType {
 
     public int getRandomCount() {
         return Randoms.randomNumber(this.min, this.max);
+    }
+
+    public FillStrategy getStrategy() {
+        return this.strategy;
     }
 }
